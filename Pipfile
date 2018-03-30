@@ -8,6 +8,7 @@ django = "*"
 
 [dev-packages]
 django-extensions = "*"
+"flake8" = "*"
 
 [requires]
 python_version = "3.6"
