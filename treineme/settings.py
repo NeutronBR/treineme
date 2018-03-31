@@ -38,8 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'usuarios',
+    # 'usuarios',
     'cursos',
+    # 'cursos.apps.CursosConfig',
 ]
 
 MIDDLEWARE = [
@@ -52,7 +53,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'treineme.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATES = [
     {
@@ -70,7 +71,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'treineme.wsgi.application'
+WSGI_APPLICATION = 'wsgi.application'
 
 
 # Database
@@ -80,6 +81,14 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+
+
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'treineme',
+        'USER': 'treinemeuser',
+        'PASSWORD': 'a1b2c3d4@@',
+        'HOST': '',
+        'PORT': '5432',
     }
 }
 
@@ -121,3 +130,22 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+
+try:
+    from local_settings import *
+    from django.contrib.messages import constants as messages
+
+    MESSAGE_TAGS = {
+        messages.DEBUG: 'alert-info',
+        messages.INFO: 'alert-info',
+        messages.SUCCESS: 'alert-success',
+        messages.WARNING: 'alert-warning',
+        messages.ERROR: 'alert-danger'
+    }
+
+    NOME_EMPRESA = 'PUC-MG'
+
+except ImportError as e:
+    print(e)
