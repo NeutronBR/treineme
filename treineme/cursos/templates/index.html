@@ -1,11 +1,38 @@
-<!DOCTYPE html>
-<html lang="pt-br" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width" />        
-        <title>TREINE-ME</title>
-    </head>
-    <body>
-        <h1>Seja bem-vindo</h1>
-    </body>
-</html>
+{% extends "base.html" %}
+{% block meubody %}
+
+<h1 class="text-center">Bem-vindo(a)!</h1>
+<div class="container">
+    <div class="home-info">
+        <p class="lead">
+            Bem-vindo(a) ao portal {{ NOME_EMPRESA }} Treine-me. Aqui você terá acesso a um grande número de treinamentos desenvolvidos especialmente para suas atividades desempenhadas na {{ NOME_EMPRESA}}.
+        </p>
+    </div>
+    <div class="card text-center">
+        <div class="card-block">
+            <p class="card-text">Cadastre-se e inicie seus estudos agora mesmo!</p>
+        </div>
+    </div>
+</div>
+{% endblock meubody %}
+
+{% block carrossel %}
+    <div id="carrossel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            {% for curso in cursos %}
+
+                {% comment "substituição do if por yesno template " %}
+                <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}"> {{ curso.nome }}</div>
+                {% endcomment %}
+
+                <div class="carousel-item {{ forloop.first|yesno:"active, " }}"> {{ curso.nome }}</div>
+            {% endfor %}
+        </div>
+        <a class="carousel-control-prev" href="#carrossel" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      </a>
+      <a class="carousel-control-next" href="#carrossel" role="button" data-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </a>
+    </div>
+{% endblock carrossel %}

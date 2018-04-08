@@ -1,0 +1,77 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width"  />
+    <link rel="stylesheet" href="{% static "css/bootstrap.css" %}" />
+    <link rel="stylesheet" href="{% static "css/main.css" %}" />
+    <link rel="stylesheet" href="{% static "css/font-awesome.css" %}" />
+    {% comment "passagem de contexto" %}
+        NOME_EMPRESA tem 2 maneiras de fazer:
+        1) context_processors.py (registrando no settings.TEMPLATES) como foi feito ou;
+        2) templatetags, no caso, com cursos_tags.py
+    {% endcomment %}
+    <title>{{ NOME_EMPRESA }} Treine-me</title>
+</head>
+<body>
+    <header>
+        <!-- <nav class="navbar navbar-expand-md navbar-dark bg-dark  navbar-fixed-top"> -->
+
+        <nav class="navbar navbar-dark bg-dark navbar-expand-md">
+            <div class="container">
+                <a href="/" class="navbar-brand">{{ NOME_EMPRESA }} Treine-Me</a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbar-responsivo" aria-controls="navbar-responsivo" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbar-responsivo">
+                    <ul class="navbar-nav ml-auto">
+                        {% if user.is_authenticated %}
+                        <span class="navbar-text mx-2 navbar-light">Seja bem-vindo(a), {{ user.first_name|default:user.username }}</span>
+
+
+                        {% endif %}
+                        {% comment "as tags url foram tiradas daqui para serem colocadas futuramente, quando o resto já existir" %}
+                        {% endcomment %}
+
+                        <li class="nav-item"><a class="nav-link" href=""><i class="fa fa-graduation-cap fa-fw" aria-hidden="true"></i> Cursos</a></li>
+                        {% if user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link" href=""><i class="fa fa-tachometer" aria-hidden="true"></i> Painel</a></li>
+                        <li class="nav-item"><a class="nav-link" href=""><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> Sair</a></li>
+                        {% else %}
+                        <li class="nav-item"><a class="nav-link" href=""><i class="fa fa-sign-in" aria-hidden="true"></i> Entrar</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main class="py-2">
+        <div class="container">
+            {% if messages %}
+            <ul>
+                {% for mensagem in messages %}
+                <div class="alert {{ mensagem.tags }}" role="alert">{{ mensagem }}</div>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+
+        {% block meubody %}
+            {% block conteudo %}
+            {% endblock conteudo %}
+        {% endblock meubody %}
+
+        {% block carrossel %}
+        {% endblock carrossel %}
+    </main>
+    <footer class="bg-dark text-white footer">
+        <div class="container">
+            <p class="text-center mb-0">Copyright © {{ NOME_EMPRESA }} Treine-me 2017</p>
+        </div>
+    </footer>
+    <script src="{% static "js/jquery-3.2.1.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/popper.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/bootstrap.js" %}" type="text/javascript"></script>
+</body>
+</html>
