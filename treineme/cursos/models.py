@@ -27,7 +27,7 @@ class Curso(models.Model):
     descricao = models.TextField('Descrição curta do curso', blank=False)
     sobre = models.TextField('Descrição completa do curso', blank=True)
     keywords = models.TextField('Palavras-chave', blank=True)
-    categoria = models.ForeignKey(Categoria, null=True, blank=False)
+    categoria = models.ForeignKey(Categoria, models.SET_NULL, null=True, blank=False)
     data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de criação')
     data_atualizacao = models.DateTimeField(auto_now=True, verbose_name='Data de atualização')
 
