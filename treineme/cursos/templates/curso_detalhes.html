@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    <li class="breadcrumb-item"><a href="{{ curso.get_absolute_url }}">{{ curso.nome }}</a></li>
+
+{% endblock breadcrumb %}
+
+{% block conteudo %}
+<div class="container">
+        <h1>{{ curso.nome }}</h1>
+        <p class="lead">
+            {{ curso.descricao }}
+        </p>
+        <p>
+            Instrutor: {{ curso.instrutor }}
+        </p>
+        {{ curso.sobre|linebreaks }}
+
+        {% comment %}
+        <a href="{% url 'inscricao' curso.atalho %}" class="btn btn-primary btn-lg">Inscreva-se</a>
+        {% endcomment %}
+        <a href="" class="btn btn-primary btn-lg">Inscreva-se</a>
+</div>
+<div class="mt-5 container" id="contato">
+    <h3>Tire suas dúvidas sobre o curso</h3>
+    {% if is_valid %}
+        <div class="alert alert-success" role="alert">
+            <p>Você enviou o formulário com sucesso</p>
+        </div>
+    {% endif %}
+    <form action="#contato" method="post">
+        <fieldset class="form-group" >
+            {% csrf_token %}
+            {{ formulario }}
+            <button type="submit" class="btn btn-primary mt-3">Enviar</button>
+        </fieldset>
+    </form>
+</div>
+{% endblock conteudo %}

@@ -1,0 +1,24 @@
+{% extends user.is_authenticated|yesno:"painel.html,base.html" %}
+{% block conteudo %}
+    <div class="container">
+        <div class="row">
+        {% for curso in cursos %}
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <h3 class="card-header">{{ curso.nome }}</h3>
+                    <div class="card-body">
+                        <p class="card-text">Instrutor: <strong>{{ curso.instrutor }}</strong></p>
+                        <p class="card-text">{{ curso.descricao | linebreaks }}</p>
+                        <a href="" class="btn btn-primary">Detalhes</a>                        
+                        {% comment %}
+                        <a href="{{ curso.get_absolute_url }}" class="btn btn-primary">Detalhes</a>
+                        {% endcomment %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>Nenhum curso está disponível na plataforma</p>
+        {% endfor %}
+        </div>
+    </div>
+{% endblock conteudo %}

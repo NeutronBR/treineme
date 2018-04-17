@@ -34,7 +34,7 @@
                         {% comment "as tags url foram tiradas daqui para serem colocadas futuramente, quando o resto já existir" %}
                         {% endcomment %}
 
-                        <li class="nav-item"><a class="nav-link" href=""><i class="fa fa-graduation-cap fa-fw" aria-hidden="true"></i> Cursos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'cursos:cursos' %}"><i class="fa fa-graduation-cap fa-fw" aria-hidden="true"></i> Cursos</a></li>
                         {% if user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link" href=""><i class="fa fa-tachometer" aria-hidden="true"></i> Painel</a></li>
                         <li class="nav-item"><a class="nav-link" href=""><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> Sair</a></li>

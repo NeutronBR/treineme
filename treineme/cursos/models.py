@@ -14,11 +14,13 @@ class Categoria(models.Model):
         verbose_name_plural = 'Categorias'
         ordering = ['nome']
 
+
 class CursoManager(models.Manager):
     # pesquisa mais aprimorada
     def pesquisa(self, query):
         # icontains -> case insensitive containment test
         return self.get_queryset().filter(models.Q(nome__icontains=query) | models.Q(descricao__icontains=query))
+
 
 class Curso(models.Model):
     nome = models.CharField(max_length=100, null=False, blank=False)
@@ -36,17 +38,22 @@ class Curso(models.Model):
     def __str__(self):
         return self.nome
 
+
+    # @models.permalink # deprecated
+    # outra forma de criar links para o curso
     def get_absolute_url(self):
-        pass
         from django.urls import reverse
-        from cursos.views import detalhes
+        from cursos import views
         # (URL, argumentos não nomeáveis, argumentos nomeáveis)
         # return('detalhes', (), {'atalho_curso': self.atalho})
-        return reverse(detalhes, args=[str(self.atalho)])
+        return reverse(views.detalhes, args=[str(self.atalho)]) # outra forma
+        # return reverse('cursos:detalhes', args=[str(self.atalho)])
+
 
     def get_aulas(self):
         pass
         return self.aulas.all()
+
 
     class Meta:
         # nome "mais tragável" para ser usado em alguns lugares tipo o admin
