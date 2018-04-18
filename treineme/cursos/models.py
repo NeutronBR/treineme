@@ -46,8 +46,10 @@ class Curso(models.Model):
         from cursos import views
         # (URL, argumentos não nomeáveis, argumentos nomeáveis)
         # return('detalhes', (), {'atalho_curso': self.atalho})
-        return reverse(views.detalhes, args=[str(self.atalho)]) # outra forma
-        # return reverse('cursos:detalhes', args=[str(self.atalho)])
+
+        # (This is discouraged because you can't reverse namespaced views this way.)
+        # return reverse(views.detalhes, args=[str(self.atalho)]) # outra forma
+        return reverse('cursos:detalhes', args=[str(self.atalho)])
 
 
     def get_aulas(self):

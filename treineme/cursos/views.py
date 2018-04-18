@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Curso
+from .forms import ContatoCurso
 # from django.http import HttpResponse
 
 # Create your views here.
@@ -22,7 +23,12 @@ def cursos(request):
 
 def detalhes(request, atalho_curso):
     curso = get_object_or_404(Curso, atalho=atalho_curso)
-    contexto = {
-        'curso': curso,
-    }
+    contexto = {}
+    if request.method == 'POST':
+        formulario = ContatoCurso(request.POST)
+    else:
+        formulario = ContatoCurso()
+
+    contexto['formulario'] = formulario
+    contexto['curso'] = curso
     return render(request, 'curso_detalhes.html', contexto)
