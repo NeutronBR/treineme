@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # 'usuarios',
+    'usuarios',
     'cursos',
     # 'cursos.apps.CursosConfig',
 ]
@@ -148,3 +148,15 @@ try:
 
 except ImportError as e:
     print(e)
+
+
+# E-mails
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'contatotreineme@gmail.com'
+EMAIL_HOST_PASSWORD = 'tr31n3m3'
+EMAIL_PORT = 587
+CONTACT_EMAIL = 'contatotreineme@gmail.com'
+DEFAULT_FROM_EMAIL = '{} Treine-ME <{}> '.format(NOME_EMPRESA, CONTACT_EMAIL)

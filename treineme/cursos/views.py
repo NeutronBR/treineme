@@ -26,6 +26,10 @@ def detalhes(request, atalho_curso):
     contexto = {}
     if request.method == 'POST':
         formulario = ContatoCurso(request.POST)
+        if formulario.is_valid():
+            contexto['is_valid'] = True
+            formulario.envia_email(curso)
+            formulario = ContatoCurso()
     else:
         formulario = ContatoCurso()
 

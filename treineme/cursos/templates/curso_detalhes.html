@@ -28,6 +28,10 @@
         <div class="alert alert-success" role="alert">
             <p>Você enviou o formulário com sucesso</p>
         </div>
+    {% else %}
+        <div class="alert alert-danger" role="alert">
+            <p>Há erros</p>
+        </div>
     {% endif %}
     <form action="#contato" method="post">
         <fieldset class="form-group" >
