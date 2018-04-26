@@ -1,10 +1,10 @@
 from django.urls import path
-from . import views
+from .views import index, cursos, detalhes
 
 # app_name = namespace
 app_name = 'cursos'
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('cursos', views.cursos, name='cursos'),
-    path('curso/<slug:atalho_curso>', views.detalhes, name='detalhes'),
+    path('', index, name='index'),
+    path('cursos', cursos, name='cursos'),
+    path('curso/<slug:atalho_curso>', detalhes, name='detalhes'),
 ]

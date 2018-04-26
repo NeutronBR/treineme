@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block meubody %}
+<div class="container">
+    <form class="form-signin" method="POST">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <h2 class="form-signin-heading">Faça seu login</h2>
+            {% for error in form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ error }}
+                    {# form.non_field_errors.as_text #}
+                </div>
+            {% endfor %}
+            <label for="inputUsername" class="sr-only">Usuário</label>
+            <input type="text" id="inputUsername" name="username" class="form-control" placeholder="Usuário" required autofocus />
+            <label for="inputPassword" class="sr-only">Senha</label>
+            <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Senha" required />
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" value="lembrar" /> Lembrar-me
+                </label>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
+        </fieldset>
+        <p>
+            Ainda não possui conta? <a href="{% url 'usuarios:registrar' %}" title="">Cadastre-se <i class="fa fa-user-plus" aria-hidden="true"></i></a>
+        </p>
+    </form>
+</div>
+{% endblock meubody %}

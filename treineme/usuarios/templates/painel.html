@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block meubody %}
+<div class="container">
+    <div class="row">
+
+    </div>
+    <div class="row">
+        <div class="col-md-3 container">
+            <nav class="painel-usuario mb-3">
+                {% block meu_painel %}
+                <h6 class="mx-3 py-1"><i class="fa fa-book fa-fw"></i> Meus Cursos</h6>
+                <ul class="nav flex-column nav-pills mb-2">
+
+
+
+
+                </ul>
+                <h6 class="mx-3 py-1"><i class="fa fa-user-circle-o fa-fw"></i> Minha conta</h6>
+                {% endblock meu_painel %}
+            </nav>
+        </div>
+
+        <div class="col-md-9">
+            {% block conteudo %}
+            <div class="container">
+                <div class="row">
+
+
+                    <div class="list-group">
+                        <h3>Meus Cursos</h3>
+                        {% for matricula in matriculas %}
+
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endblock conteudo %}
+        </div>
+    </div>
+</div>
+{% endblock meubody %}

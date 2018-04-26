@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'widget_tweaks',
+
     'usuarios',
     'cursos',
     # 'cursos.apps.CursosConfig',
@@ -130,7 +132,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
 
+# Auth
+LOGIN_URL = 'usuarios:login'
+LOGIN_REDIRECT_URL = 'usuarios:painel'
+# LOGOUT_URL = 'usuarios:logout'
 
 try:
     from local_settings import *
