@@ -138,7 +138,24 @@ STATIC_URL = '/static/'
 # Auth
 LOGIN_URL = 'usuarios:login'
 LOGIN_REDIRECT_URL = 'usuarios:painel'
-# LOGOUT_URL = 'usuarios:logout'
+LOGOUT_URL = 'usuarios:logout'
+
+
+# Nome da empresa pela aplicação
+NOME_EMPRESA = 'PUC-MG'
+
+
+# E-mails
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'email@gmail.com'
+EMAIL_HOST_PASSWORD = 'password'
+EMAIL_PORT = 587
+CONTACT_EMAIL = 'email@gmail.com'
+DEFAULT_FROM_EMAIL = '{} Treine-ME <{}> '.format(NOME_EMPRESA, CONTACT_EMAIL)
+
 
 try:
     from local_settings import *
@@ -152,19 +169,6 @@ try:
         messages.ERROR: 'alert-danger'
     }
 
-    NOME_EMPRESA = 'PUC-MG'
 
 except ImportError as e:
     print(e)
-
-
-# E-mails
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'contatotreineme@gmail.com'
-EMAIL_HOST_PASSWORD = 'tr31n3m3'
-EMAIL_PORT = 587
-CONTACT_EMAIL = 'contatotreineme@gmail.com'
-DEFAULT_FROM_EMAIL = '{} Treine-ME <{}> '.format(NOME_EMPRESA, CONTACT_EMAIL)
