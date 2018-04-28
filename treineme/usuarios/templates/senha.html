@@ -1,0 +1,42 @@
+{% extends 'painel.html' %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    <li class="breadcrumb-item active">
+        <a <href="{% url 'usuarios:senha' %}">Alterar senha</href>
+    </li>
+{% endblock breadcrumb %}
+
+{% block conteudo %}
+{% load widget_tweaks %}
+<div class="container">
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <h3 class="form-signin-heading">Editar senha</h3>
+            {% for erro in formulario.non_field_errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ erro }}
+            </div>
+            {% endfor %}
+
+            {% if sucesso %}
+            <div class="alert alert-success" role="alert">
+                <p>Sua senha foi alterada com sucesso</p>
+            </div>
+            {% endif %}
+
+            {% for campo in formulario %}
+                {{ campo.label_tag }}
+                {{ campo|add_class:"form-control"}}
+                {% for erro in campo.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ erro }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            <button class="btn btn-lg btn-primary btn-block mt-4" type="submit">Alterar senha</button>
+        </fieldset>
+    </form>
+</div>
+{% endblock conteudo %}

@@ -3,7 +3,13 @@
 {% block meubody %}
 <div class="container">
     <div class="row">
-
+        <ol class="breadcrumb">
+            {% block breadcrumb %}
+            <li class="breadcrumb-item">
+                <i class="fa fa-sitemap fa-fw" aria-hidden="true"></i><a href="{% url 'usuarios:painel' %}"> Meu Painel</a>
+            </li>
+            {% endblock breadcrumb %}
+        </ol>
     </div>
     <div class="row">
         <div class="col-md-3 container">
@@ -17,6 +23,14 @@
 
                 </ul>
                 <h6 class="mx-3 py-1"><i class="fa fa-user-circle-o fa-fw"></i> Minha conta</h6>
+                <ul class="nav flex-column nav-pills">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'usuarios:editar' %}"><i class="fa fa-cog fa-fw"></i>Configurações</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'usuarios:senha' %}"><i class="fa fa-lock fa-fw"></i> Alterar senha</a>
+                    </li>
+                </ul>
                 {% endblock meu_painel %}
             </nav>
         </div>
