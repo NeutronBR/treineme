@@ -1,4 +1,6 @@
 from django.db import models
+# from django.conf import settings
+from django.contrib.auth import get_user_model
 
 # Create your models here.
 
@@ -63,3 +65,37 @@ class Curso(models.Model):
         verbose_name = 'Curso'
         verbose_name_plural = 'Cursos'
         ordering = ['nome']
+
+
+class Inscricao(models.Model):
+    PENDENTE_STATUS = 0
+    INSCRITO_STATUS = 1
+    APROVADO_STATUS = 2
+    CANCELADO_STATUS = 3
+    STATUS_CHOICES = (
+        (PENDENTE_STATUS, 'Pendente'),
+        (INSCRITO_STATUS, 'Inscrito'),
+        (APROVADO_STATUS, 'Aprovado'),
+        (CANCELADO_STATUS, 'Cancelado')
+    )
+    # usuario = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Usuário', related_name='inscricoes')
+    usuario = models.ForeignKey(get_user_model(), verbose_name='Usuário', related_name='inscricoes', on_delete=models.PROTECT)
+    curso = models.ForeignKey(Curso, verbose_name='Curso', related_name='inscricoes', on_delete=models.PROTECT)
+    status = models.IntegerField(verbose_name='Situação', choices=STATUS_CHOICES, default=INSCRITO_STATUS, blank=True)
+    data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de criação')
+    data_atualizacao = models.DateTimeField(auto_now=True, verbose_name='Data de atualização')
+
+    def inscrever(self):
+        self.status = self.INSCRITO_STATUS
+        self.save()
+
+    def inscrito(self):
+        return not(self.status == (self.PENDENTE_STATUS or self.CANCELADO_STATUS))
+
+    def aprovado(self):
+        return self.status == self.APROVADO_STATUS
+
+    class Meta:
+        verbose_name = 'Inscrição'
+        verbose_name_plural = 'Inscrições'
+        unique_together = (('curso', 'usuario'),)

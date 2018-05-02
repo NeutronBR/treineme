@@ -1,21 +1,18 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 # from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import authenticate, login, update_session_auth_hash
-from usuarios.forms import RegistroForm, EditarUsuarioForm
+from django.contrib.auth import authenticate, login, update_session_auth_hash, get_user_model
+from usuarios.forms import RegistroForm, EditarUsuarioForm, ResetSenhaForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
+from usuarios.models import SenhaReset
+
 
 # import pdb
 
 # Create your views here.
 
 
-@login_required
-def painel(request):
-    template_name = 'painel.html'
-    contexto = {}
-
-    return render(request, template_name, contexto)
+Usuario = get_user_model()
 
 
 def registrar(request):
@@ -33,6 +30,41 @@ def registrar(request):
     contexto = {
         'formulario': form
     }
+    return render(request, template_name, contexto)
+
+
+def reset_senha(request):
+    template_name = 'reset_senha.html'
+    contexto = {}
+    # se o POST estiver vazio, é a mesma coisa que form = ResetSenhaForm()
+    form = ResetSenhaForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        contexto['sucesso'] = True
+
+    contexto['formulario'] = form
+    return render(request, template_name, contexto)
+
+
+def reset_senha_confirmacao(request, chave):
+    template_name = 'reset_senha_confirmacao.html'
+    contexto = {}
+    reset = get_object_or_404(SenhaReset, chave=chave)
+    # usando form padrão do django que herda de forms.Form. 'data' é conferido por is_bound
+    form = SetPasswordForm(user=reset.usuario, data=request.POST or None)
+    if form.is_valid():
+        form.save()
+        contexto['sucesso'] = True
+
+    contexto['formulario'] = form
+    return render(request, template_name, contexto)
+
+
+@login_required
+def painel(request):
+    template_name = 'painel.html'
+    contexto = {}
+
     return render(request, template_name, contexto)
 
 
@@ -56,7 +88,8 @@ def editar(request):
 
 
 @login_required
-def senha(request):
+def editar_senha(request):
+    # usando formulário padrão do django
     template_name = 'senha.html'
     contexto = {}
 

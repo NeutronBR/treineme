@@ -25,6 +25,9 @@
         <p>
             Ainda não possui conta? <a href="{% url 'usuarios:registrar' %}" title="">Cadastre-se <i class="fa fa-user-plus" aria-hidden="true"></i></a>
         </p>
+        <p>
+            Esqueceu a senha? <a href="{% url 'usuarios:reset_senha' %}" title="">Nova senha <i class="fa fa-unlock-alt" aria-hidden="true"></i></a>
+        </p>
     </form>
 </div>
 {% endblock meubody %}
