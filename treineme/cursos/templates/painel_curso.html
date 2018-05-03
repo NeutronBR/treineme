@@ -1,0 +1,39 @@
+{% extends "painel.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    <li class="breadcrumb-item"><a href="{% url 'cursos:anuncios' curso.atalho %}">{{ curso }}</a></li>
+{% endblock breadcrumb %}
+
+{% block menu_painel %}
+
+<h6 class="mx-3 py-1"><i class="fa fa-book fa-fw"></i> {{ curso }}</h6>
+<ul class="nav flex-column nav-pills mb-2">
+    <li class="nav-item">
+        <a class="nav-link" href=""><i class="fa fa-envelope fa-fw"></i> Anúncios</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href=""><i class="fa fa-video-camera fa-fw"></i> Aulas e materiais</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href=""><i class="fa fa-info-circle fa-fw"></i> Informações</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href=""><i class="fa fa-comments fa-fw"></i> Fórum</a>
+    </li>
+    {% comment "Possível menu dropdown de aulas" %}
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="http://google.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Aulas
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </li>
+      {% endcomment %}
+</ul>
+
+{{ block.super }}
+{% endblock menu_painel %}

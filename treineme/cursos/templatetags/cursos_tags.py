@@ -17,7 +17,7 @@ def meus_cursos(usuario):
 
 
 # simple_tag é, basicamente, para retornar dados (contexto) desejados. O HTML será criado dentro da template que o chama, diferente da tag acima. O HTML fica mais flexível, pois o contexto está disponível na template para usar como quiser, mudando a template ou usando em vários locais.
-# chamada {% meus_cursos as inscricoes %}
+# chamada {% load_meus_cursos user as inscricoes %}
 # https://docs.djangoproject.com/pt-br/2.0/howto/custom-template-tags/
 @register.simple_tag
 def load_meus_cursos(usuario):

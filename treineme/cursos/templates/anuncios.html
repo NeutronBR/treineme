@@ -1,0 +1,33 @@
+{% extends "painel_curso.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    <li class="breadcrumb-item">Anúncios</li>
+{% endblock breadcrumb %}
+
+
+{% block conteudo %}
+<div class="container">
+    <div class="list-group">
+        <h3 class="mx-2">Anúncios</h3>
+        {% for anuncio in anuncios %}
+        <div class="list-group-item">
+            <h4><a href="#">{{ anuncios.titulo }}</a></h4>
+            <div class="mb-3">
+                <small>Última atualização em: {{ anuncio.data_atualizacao }}</small>
+            </div>
+            {{ anuncio.conteudo|linebreaks }}
+            <p><a href="#"><i class="fa fa-comments-o"></i>
+                {% with total_comentarios=anuncio.comentarios.count %}
+                {{ total_comentarios }} comentário{{ total_comentarios|pluralize }}
+                {% endwith %}
+            </a></p>
+        </div>
+        {% empty %}
+        <div class="list-group-item">
+            <h4>Nenhum anúncio encontrado</h4>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock conteudo %}

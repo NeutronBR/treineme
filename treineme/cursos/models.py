@@ -102,3 +102,11 @@ class Inscricao(models.Model):
         verbose_name = 'Inscrição'
         verbose_name_plural = 'Inscrições'
         unique_together = (('curso', 'usuario'),)
+
+
+class Anuncio(models.Model):
+    curso = models.ForeignKey(Curso, verbose_name='Curso', on_delete=models.PROTECT)
+    titulo = models.CharField(verbose_name='Título', max_length=100)
+    conteudo = models.TextField(verbose_name='Conteúdo')
+    data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de criação')
+    data_atualizacao = models.DateTimeField(auto_now=True, verbose_name='Data de atualização')

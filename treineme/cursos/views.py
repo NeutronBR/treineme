@@ -49,3 +49,14 @@ def inscricao(request, atalho_curso):
 
     return redirect('usuarios:painel')
     # return redirect(reverse('anuncios', kwargs={'atalho_curso': atalho_curso}))
+
+
+@login_required
+def anuncios(request, atalho_curso):
+    curso = get_object_or_404(Curso, atalho=atalho_curso)
+    template = 'anuncios.html'
+    contexto = {
+        'curso': curso,
+        # 'anuncios': curso.anuncios.all()
+    }
+    return render(request, template, contexto)

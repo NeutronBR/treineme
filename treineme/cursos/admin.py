@@ -4,7 +4,7 @@ from cursos.models import Curso, Categoria, Inscricao
 
 
 class CursoAdmin(admin.ModelAdmin):
-    list_display = ['nome', 'atalho', 'data_criacao', 'data_atualizacao']
+    list_display = ['nome', 'atalho', 'categoria', 'data_criacao', 'data_atualizacao']
     search_fields = ['nome', 'atalho']
     prepopulated_fields = {'atalho': ('nome',)}
 

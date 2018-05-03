@@ -21,7 +21,7 @@
     <div class="row">
         <div class="col-md-3 container">
             <nav class="painel-usuario mb-3">
-                {% block meu_painel %}
+                {% block menu_painel %}
                 <h6 class="mx-3 py-1"><i class="fa fa-book fa-fw"></i> Meus Cursos</h6>
                 <ul class="nav flex-column nav-pills mb-2">
                     {% meus_cursos user %}
@@ -35,7 +35,7 @@
                         <a class="nav-link" href="{% url 'usuarios:editar_senha' %}"><i class="fa fa-lock fa-fw"></i> Alterar senha</a>
                     </li>
                 </ul>
-                {% endblock meu_painel %}
+                {% endblock menu_painel %}
             </nav>
         </div>
 
