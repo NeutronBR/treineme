@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends user.is_authenticated|yesno:"painel.html,base.html" %}
 
 {% block breadcrumb %}
     {{ block.super }}
@@ -7,6 +7,7 @@
 {% endblock breadcrumb %}
 
 {% block conteudo %}
+{% load widget_tweaks %}
 <div class="container">
         <h1>{{ curso.nome }}</h1>
         <p class="lead">
@@ -18,25 +19,36 @@
         {{ curso.sobre|linebreaks }}
 
         {% comment %}
-        <a href="{% url 'inscricao' curso.atalho %}" class="btn btn-primary btn-lg">Inscreva-se</a>
-        {% endcomment %}
         <a href="" class="btn btn-primary btn-lg">Inscreva-se</a>
+        {% endcomment %}
+        <a href="{% url 'cursos:inscricao' curso.atalho %}" class="btn btn-primary btn-lg">Inscreva-se</a>
 </div>
 <div class="mt-5 container" id="contato">
-    <h3>Tire suas dúvidas sobre o curso</h3>
-    {% if is_valid %}
-        <div class="alert alert-success" role="alert">
-            <p>Você enviou o formulário com sucesso</p>
-        </div>
-    {% else %}
-        <div class="alert alert-danger" role="alert">
-            <p>Há erros</p>
-        </div>
-    {% endif %}
     <form action="#contato" method="post">
+        {% csrf_token %}
         <fieldset class="form-group" >
-            {% csrf_token %}
-            {{ formulario }}
+            <h3>Tire suas dúvidas sobre o curso</h3>
+            {% for erro in formulario.non_field_errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ erro }}
+            </div>
+            {% endfor %}
+
+            {% if sucesso %}
+            <div class="alert alert-success" role="alert">
+                <p>Sua mensagem foi enviada com sucesso</p>
+            </div>
+            {% endif %}
+
+            {% for campo in formulario %}
+                {{ campo.label_tag }}
+                {{ campo|add_class:"form-control"}}
+                {% for erro in campo.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ erro }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
             <button type="submit" class="btn btn-primary mt-3">Enviar</button>
         </fieldset>
     </form>

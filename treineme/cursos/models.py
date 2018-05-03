@@ -45,7 +45,7 @@ class Curso(models.Model):
     # outra forma de criar links para o curso
     def get_absolute_url(self):
         from django.urls import reverse
-        from cursos import views
+        # from cursos import views
         # (URL, argumentos não nomeáveis, argumentos nomeáveis)
         # return('detalhes', (), {'atalho_curso': self.atalho})
 
@@ -84,6 +84,9 @@ class Inscricao(models.Model):
     status = models.IntegerField(verbose_name='Situação', choices=STATUS_CHOICES, default=INSCRITO_STATUS, blank=True)
     data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de criação')
     data_atualizacao = models.DateTimeField(auto_now=True, verbose_name='Data de atualização')
+
+    def __str__(self):
+        return '{} inscrito em {}'.format(self.usuario.get_full_name(), self.curso)
 
     def inscrever(self):
         self.status = self.INSCRITO_STATUS

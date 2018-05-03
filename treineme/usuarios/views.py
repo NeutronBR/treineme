@@ -4,7 +4,9 @@ from django.contrib.auth import authenticate, login, update_session_auth_hash, g
 from usuarios.forms import RegistroForm, EditarUsuarioForm, ResetSenhaForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
+from django.contrib import messages
 from usuarios.models import SenhaReset
+from cursos.models import Inscricao
 
 
 # import pdb
@@ -63,8 +65,9 @@ def reset_senha_confirmacao(request, chave):
 @login_required
 def painel(request):
     template_name = 'painel.html'
-    contexto = {}
-
+    contexto = {
+        'inscricoes': Inscricao.objects.filter(usuario=request.user)
+    }
     return render(request, template_name, contexto)
 
 
@@ -73,15 +76,17 @@ def editar(request):
     template_name = 'editar.html'
     contexto = {}
 
-    if request.method == 'POST':
-        form = EditarUsuarioForm(request.POST, instance=request.user)
-        # pdb.set_trace()
-        if form.is_valid():
-            form.save()
-            form = EditarUsuarioForm(instance=request.user)
-            contexto['sucesso'] = True
-    else:
+    # if request.method == 'POST':
+    form = EditarUsuarioForm(request.POST or None, instance=request.user)
+    # pdb.set_trace()
+    if form.is_valid():
+        form.save()
         form = EditarUsuarioForm(instance=request.user)
+        messages.success(request, 'Você editou sua conta com sucesso')
+        contexto['sucesso'] = True
+        return redirect('usuarios:painel')  # Com este redirect o contexto sucesso não está sendo usado
+    # else:
+        # form = EditarUsuarioForm(instance=request.user)
 
     contexto['formulario'] = form
     return render(request, template_name, contexto)
@@ -90,7 +95,7 @@ def editar(request):
 @login_required
 def editar_senha(request):
     # usando formulário padrão do django
-    template_name = 'senha.html'
+    template_name = 'editar_senha.html'
     contexto = {}
 
     if request.method == 'POST':

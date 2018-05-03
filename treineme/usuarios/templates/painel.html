@@ -1,4 +1,11 @@
 {% extends "base.html" %}
+{% load cursos_tags %}
+
+
+{% comment "templatetags" %}
+    O load de templatetags foi feito na tag abaixo e inserido com {% meus_cursos user %}. Essa foi uma tag criada para a exibição dos cursos inscritos de qualquer view que extendesse a template painel.html, sem precisar alterar o código de todas as views que a chamassem (adicionando ao contexto as inscricoes do usuario).
+{% endcomment %}
+
 
 {% block meubody %}
 <div class="container">
@@ -17,10 +24,7 @@
                 {% block meu_painel %}
                 <h6 class="mx-3 py-1"><i class="fa fa-book fa-fw"></i> Meus Cursos</h6>
                 <ul class="nav flex-column nav-pills mb-2">
-
-
-
-
+                    {% meus_cursos user %}
                 </ul>
                 <h6 class="mx-3 py-1"><i class="fa fa-user-circle-o fa-fw"></i> Minha conta</h6>
                 <ul class="nav flex-column nav-pills">

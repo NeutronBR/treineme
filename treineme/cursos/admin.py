@@ -1,5 +1,5 @@
 from django.contrib import admin
-from cursos.models import Curso, Categoria
+from cursos.models import Curso, Categoria, Inscricao
 # Register your models here.
 
 
@@ -14,6 +14,11 @@ class CategoriaAdmin(admin.ModelAdmin):
     search_fields = ['nome']
 
 
+class InscricaoAdmin(admin.ModelAdmin):
+    list_display = ['curso', 'usuario', 'status']
+    search_fields = ['usuario__username', 'curso__nome']
+
 
 admin.site.register(Curso, CursoAdmin)
 admin.site.register(Categoria, CategoriaAdmin)
+admin.site.register(Inscricao, InscricaoAdmin)
