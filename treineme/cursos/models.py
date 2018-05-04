@@ -105,8 +105,29 @@ class Inscricao(models.Model):
 
 
 class Anuncio(models.Model):
-    curso = models.ForeignKey(Curso, verbose_name='Curso', on_delete=models.PROTECT)
+    curso = models.ForeignKey(Curso, verbose_name='Curso', on_delete=models.PROTECT, related_name='anuncios')
     titulo = models.CharField(verbose_name='Título', max_length=100)
     conteudo = models.TextField(verbose_name='Conteúdo')
     data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de criação')
     data_atualizacao = models.DateTimeField(auto_now=True, verbose_name='Data de atualização')
+
+    def __str__(self):
+        return self.titulo
+
+    class Meta:
+        verbose_name = 'Anúncio'
+        verbose_name_plural = 'Anúncios'
+        ordering = ['-data_atualizacao']
+
+
+class Comentario(models.Model):
+    anuncio = models.ForeignKey(Anuncio, related_name='comentarios', on_delete=models.PROTECT)
+    usuario = models.ForeignKey(get_user_model(), related_name='comentarios', on_delete=models.PROTECT)
+    comentario = models.TextField(verbose_name='Comentário')
+    data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de criação')
+    data_atualizacao = models.DateTimeField(auto_now=True, verbose_name='Data de atualização')
+
+    class Meta:
+        verbose_name = 'Comentário'
+        verbose_name_plural = 'Comentários'
+        ordering = ['data_criacao']

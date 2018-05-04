@@ -43,12 +43,21 @@
             {% block conteudo %}
             <div class="container">
                 <div class="row">
-
-
+                    {% load_meus_cursos user as inscricoes %}
                     <div class="list-group">
                         <h3>Meus Cursos</h3>
-                        {% for matricula in matriculas %}
-
+                        {% for inscricao in inscricoes %}
+                        <a class="list-group-item list-group-item-action" href="{% url 'cursos:anuncios' inscricao.curso.atalho %}">
+                            <h4>{{ inscricao.curso }}</h4>
+                            <div class="mb-3">
+                                <small>Última atualização em: {{ inscricao.curso.data_atualizacao|date:'d/m/Y'|default:'Sem data' }}</small>
+                            </div>
+                            <p>{{ inscricao.curso.descricao|linebreaks }}</p>
+                        </a>
+                        {% empty %}
+                        <div class="alert alert-info" role="alert">
+                            Você ainda não se inscreveu em um curso
+                        </div>
                         {% endfor %}
                     </div>
                 </div>

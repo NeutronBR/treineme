@@ -57,6 +57,23 @@ def anuncios(request, atalho_curso):
     template = 'anuncios.html'
     contexto = {
         'curso': curso,
-        # 'anuncios': curso.anuncios.all()
+        'anuncios': curso.anuncios.all()
     }
+    return render(request, template, contexto)
+
+
+@login_required
+def anuncio_detalhes(request, atalho_curso, pk):
+    curso = get_object_or_404(Curso, atalho=atalho_curso)
+    anuncio = get_object_or_404(curso.anuncios.all(), pk=pk)
+    # form = ComentarioForm(request.POST or None)
+
+    template = "anuncio_detalhes.html"
+
+    contexto = {
+        'curso': curso,
+        'anuncio': anuncio,
+        'comentarios': anuncio.comentarios.all()
+    }
+
     return render(request, template, contexto)

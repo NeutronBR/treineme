@@ -1,0 +1,42 @@
+{% extends "painel_curso.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    <li class="breadcrumb-item">{{ anuncio.titulo }}</li>
+{% endblock breadcrumb %}
+
+
+{% block conteudo %}
+<div class="card">
+    <div class="card-header">
+        <h4 class="card-title">{{ anuncio.titulo }}</h4>
+        <div class="card-subtitle text-muted">
+            <small>Última atualização: {{ anuncio.data_atualizacao }}</small>
+        </div>
+        <p class="card_text">{{ anuncio.conteudo|linebreaksbr }}</p>
+        <p class="text-right"><a href="#add_comentario"><i class="fa fa-commenting-o"></i> Comentar</a></p>
+    </div>
+    <ul class="list-group list-group-flush" id="comentarios">
+        {% for comentario in comentarios %}
+        <li class="list-group-item">
+            <h6 class="mb-0">{{ comentario.usuario.get_full_name|default:comentario.usuario.username }}
+            </h6>
+            <div class="mb-3 text-muted">
+                <small>Há {{ comentario.data_atualizacao|timesince }}</small>
+            </div>
+            <div class="card-text">
+            {{ comentario.comentario|linebreaks }}
+            </div>
+        </li>
+        {% empty %}
+        <li class="list-group-item">
+            <h4>Nenhum comentário encontrado</h4>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+
+
+
+{% endblock conteudo %}

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from cursos.models import Curso, Categoria, Inscricao
+from cursos.models import Curso, Categoria, Inscricao, Anuncio, Comentario
 # Register your models here.
 
 
@@ -19,6 +19,9 @@ class InscricaoAdmin(admin.ModelAdmin):
     search_fields = ['usuario__username', 'curso__nome']
 
 
+
 admin.site.register(Curso, CursoAdmin)
 admin.site.register(Categoria, CategoriaAdmin)
 admin.site.register(Inscricao, InscricaoAdmin)
+# O registro de admin não exige a criação de uma classe
+admin.site.register([Anuncio, Comentario, ])
