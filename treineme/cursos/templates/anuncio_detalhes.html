@@ -36,7 +36,26 @@
     </ul>
 </div>
 
-
-
+<form class="mt-5" method="POST">
+    {% csrf_token %}
+    {% load widget_tweaks %}
+    {% for erro in formulario.non_field_errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ erro }}
+    </div>
+    {% endfor %}
+    <fieldset class="form-group">
+        {% for campo in formulario %}
+            {{ campo.label_tag }}
+            {{ campo|add_class:"form-control"}}
+            {% for erro in campo.errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ erro }}
+            </div>
+            {% endfor %}
+        {% endfor %}
+    </fieldset>
+    <button class="btn btn-lg btn-primary">Enviar</button>
+</form>
 
 {% endblock conteudo %}

@@ -2,6 +2,7 @@ from django import forms
 # from django.core.mail import send_mail
 from django.conf import settings
 from mail import envia_email_template
+from cursos.models import Comentario
 
 
 class ContatoCurso(forms.Form):
@@ -26,3 +27,10 @@ class ContatoCurso(forms.Form):
             'mensagem': self.cleaned_data['mensagem'],
         }
         envia_email_template(assunto, template_name, contexto, [settings.CONTACT_EMAIL])
+
+
+class ComentarioForm(forms.ModelForm):
+
+    class Meta:
+        model = Comentario
+        fields = ['comentario']

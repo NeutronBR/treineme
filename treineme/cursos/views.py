@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from cursos.models import Curso, Inscricao
-from cursos.forms import ContatoCurso
+from cursos.forms import ContatoCurso, ComentarioForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 # from django.http import HttpResponse
@@ -66,14 +66,27 @@ def anuncios(request, atalho_curso):
 def anuncio_detalhes(request, atalho_curso, pk):
     curso = get_object_or_404(Curso, atalho=atalho_curso)
     anuncio = get_object_or_404(curso.anuncios.all(), pk=pk)
-    # form = ComentarioForm(request.POST or None)
+    form = ComentarioForm(request.POST or None)
+
+    if form.is_valid():
+        # atribuir ao form os dados enviados mas sem salvar no BD
+        comentario = form.save(commit=False)
+        comentario.anuncio = anuncio
+        comentario.usuario = request.user
+        # salvar efetivamente no BD
+        comentario.save()
+
+        form = ComentarioForm()
+        messages.success(request, 'Seu comentário foi enviado com sucesso')
 
     template = "anuncio_detalhes.html"
 
     contexto = {
         'curso': curso,
         'anuncio': anuncio,
-        'comentarios': anuncio.comentarios.all()
+        'comentarios': anuncio.comentarios.all(),
+        'formulario': form
     }
+
 
     return render(request, template, contexto)
