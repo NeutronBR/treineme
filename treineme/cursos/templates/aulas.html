@@ -1,0 +1,38 @@
+{% extends "painel_curso.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    <li class="breadcrumb-item">
+        <a href="{% url 'cursos:aulas' curso.atalho %}">Aulas</a>
+    </li>
+{% endblock breadcrumb %}
+
+{% block conteudo %}
+<div class="container">
+    <div class="list-group">
+        <h3 class="mx-2">Aulas</h3>
+        {% for aula in aulas %}
+        <div class="list-group-item">
+            <h4><a href="{% url 'cursos:aula_detalhes' curso.atalho aula.pk %}">{{ aula }}</a></h4>
+            <div class="mb-3">
+                <small>Última atualização em {{ aula.data_atualizacao }}</small>
+            </div>
+            <p>{{ aula.descricao|truncatewords:'40' }}</p>
+            <p>
+                <a href="{% url 'cursos:aula_detalhes' curso.atalho aula.pk %}">
+                    <i class="fa fa-video-camera fa-fw"></i>
+                    {% with total_videos=aula.videos.count %}
+                    {{ total_videos }}
+                    Vídeo{{ total_videos|pluralize }}
+                    {% endwith %}
+                </a>
+            </p>
+        </div>
+        {% empty %}
+        <div class="list-group-item">
+            <h4>Este curso ainda não possui aulas</h4>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock conteudo %}

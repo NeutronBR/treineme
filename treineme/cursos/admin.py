@@ -1,5 +1,5 @@
 from django.contrib import admin
-from cursos.models import Curso, Categoria, Inscricao, Anuncio, Comentario
+from cursos.models import Curso, Categoria, Inscricao, Anuncio, Comentario, Aula, Video
 # Register your models here.
 
 
@@ -19,9 +19,24 @@ class InscricaoAdmin(admin.ModelAdmin):
     search_fields = ['usuario__username', 'curso__nome']
 
 
+# class VideoInlineAdmin(admin.StackedInline):
+class VideoInlineAdmin(admin.TabularInline):
+    model = Video
+
+
+class AulaAdmin(admin.ModelAdmin):
+    list_display = ['nome', 'ordem', 'curso']
+    search_fields = ['nome']
+    list_filter = ['curso']
+
+    inlines = [
+        VideoInlineAdmin,
+    ]
+
 
 admin.site.register(Curso, CursoAdmin)
 admin.site.register(Categoria, CategoriaAdmin)
 admin.site.register(Inscricao, InscricaoAdmin)
 # O registro de admin não exige a criação de uma classe
-admin.site.register([Anuncio, Comentario, ])
+admin.site.register([Anuncio, Comentario, Video])
+admin.site.register(Aula, AulaAdmin)

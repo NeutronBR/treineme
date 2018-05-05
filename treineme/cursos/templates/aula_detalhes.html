@@ -1,0 +1,62 @@
+{% extends "painel_curso.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    <li class="breadcrumb-item">
+        <a href="{% url 'cursos:aula_detalhes' curso.atalho aula.pk %}">{{ aula }}</a>
+    </li>
+{% endblock breadcrumb %}
+
+{% block conteudo %}
+<div class="card">
+    <div class="card-header">
+        <h4 class="card-title">{{ aula }}</h4>
+        <div class="card-subtitle text-muted">
+            <small>Atualizado há {{ aula.data_atualizacao|timesince }}</small>
+        </div>
+        <p class="card_text">{{ aula.descricao|linebreaksbr }}</p>
+        {% if aula.aula_ant %}
+        <a href="{% url 'cursos:aula_detalhes' curso.atalho aula.aula_ant.pk %}" title="Aula anterior">
+            <i class="fa fa-chevron-left float-left" aria-hidden="true"></i>
+        </a>
+        {% endif %}
+        {% if aula.aula_prox %}
+        <a href="{% url 'cursos:aula_detalhes' curso.atalho aula.aula_prox.pk %}" title="Próxima Aula">
+            <i class="fa fa-chevron-right float-right" aria-hidden="true"></i>
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+
+<div id="accordion" role="tablist" aria-multiselectable="true">
+    {% for video in videos %}
+    <div class="card">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{ video.pk }}" aria-expanded="true" aria-controls="collapse{{ video.pk }}">
+            <div class="card-header" role="tab" id="heading{{ video.pk }}">
+                <h5 class="mb-0">
+                    {{ video }}
+                    <i class="fa fa-angle-down float-right" aria-hidden="true"></i>
+                </h5>
+            </div>
+        </a>
+        <div id="collapse{{ video.pk }}" class="collapse" role="tabpanel" aria-labelledby="heading{{ video.pk }}">
+            <div class="card-body">
+                <div class="mb-3 text-muted">
+                    <small>Atualizado há {{ video.data_atualizacao|timesince }}</small>
+                </div>
+                <div class="video-container">
+                    {{ video.link|safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Não há vídeo cadastrado</h5>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock conteudo %}

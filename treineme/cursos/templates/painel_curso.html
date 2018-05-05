@@ -10,10 +10,10 @@
 <h6 class="mx-3 py-1"><i class="fa fa-book fa-fw"></i> {{ curso }}</h6>
 <ul class="nav flex-column nav-pills mb-2">
     <li class="nav-item">
-        <a class="nav-link" href=""><i class="fa fa-envelope fa-fw"></i> Anúncios</a>
+        <a class="nav-link" href="{% url 'cursos:anuncios' curso.atalho %}"><i class="fa fa-envelope fa-fw"></i> Anúncios</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href=""><i class="fa fa-video-camera fa-fw"></i> Aulas e materiais</a>
+        <a class="nav-link" href="{% url 'cursos:aulas' curso.atalho %}"><i class="fa fa-video-camera fa-fw"></i> Aulas e materiais</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href=""><i class="fa fa-info-circle fa-fw"></i> Informações</a>

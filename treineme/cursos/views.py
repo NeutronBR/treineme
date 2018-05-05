@@ -1,8 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from cursos.models import Curso, Inscricao
+from cursos.models import Curso, Inscricao, Anuncio, Aula
 from cursos.forms import ContatoCurso, ComentarioForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from cursos.decorators import inscricao_requerida
 # from django.http import HttpResponse
 
 # Create your views here.
@@ -47,11 +48,12 @@ def inscricao(request, atalho_curso):
     else:
         messages.warning(request, 'Você já está inscrito(a) no curso {}'.format(curso))
 
-    return redirect('usuarios:painel')
+    return redirect('cursos:anuncios', curso.atalho)
     # return redirect(reverse('anuncios', kwargs={'atalho_curso': atalho_curso}))
 
 
 @login_required
+@inscricao_requerida
 def anuncios(request, atalho_curso):
     curso = get_object_or_404(Curso, atalho=atalho_curso)
     template = 'anuncios.html'
@@ -63,10 +65,15 @@ def anuncios(request, atalho_curso):
 
 
 @login_required
+@inscricao_requerida
 def anuncio_detalhes(request, atalho_curso, pk):
     curso = get_object_or_404(Curso, atalho=atalho_curso)
-    anuncio = get_object_or_404(curso.anuncios.all(), pk=pk)
+    # anuncio = get_object_or_404(curso.anuncios.all(), pk=pk)
+    anuncio = get_object_or_404(Anuncio, pk=pk)
     form = ComentarioForm(request.POST or None)
+
+    # print('Tipo: {}'.format(type(request)))
+    # print('Dir: {}'.format(dir(request)))
 
     if form.is_valid():
         # atribuir ao form os dados enviados mas sem salvar no BD
@@ -89,4 +96,32 @@ def anuncio_detalhes(request, atalho_curso, pk):
     }
 
 
+    return render(request, template, contexto)
+
+
+@login_required
+@inscricao_requerida
+def aulas(request, atalho_curso):
+    curso = get_object_or_404(Curso, atalho=atalho_curso)
+    template = 'aulas.html'
+    contexto = {
+        'curso': curso,
+        'aulas': curso.get_aulas()
+    }
+    return render(request, template, contexto)
+
+
+@login_required
+@inscricao_requerida
+def aula_detalhes(request, atalho_curso, aula_pk):
+    curso = get_object_or_404(Curso, atalho=atalho_curso)
+    # aula = get_object_or_404(Aula, pk=aula_pk, curso=curso)
+    aula = get_object_or_404(Aula, pk=aula_pk)
+    template = 'aula_detalhes.html'
+    contexto = {
+        'curso': curso,
+        'aula': aula,
+        'videos': aula.videos.all(),
+        # 'materiais_complementares': aula.materiais_complementares.all(),
+    }
     return render(request, template, contexto)

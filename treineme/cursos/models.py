@@ -41,7 +41,6 @@ class Curso(models.Model):
     def __str__(self):
         return self.nome
 
-
     # @models.permalink # deprecated
     # outra forma de criar links para o curso
     def get_absolute_url(self):
@@ -55,9 +54,7 @@ class Curso(models.Model):
 
 
     def get_aulas(self):
-        pass
         return self.aulas.all()
-
 
     class Meta:
         # nome "mais tragável" para ser usado em alguns lugares tipo o admin
