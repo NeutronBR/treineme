@@ -1,7 +1,7 @@
 from django.db import models
 # from django.conf import settings
 from django.contrib.auth import get_user_model
-
+from mail import envia_email_template
 # Create your models here.
 
 
@@ -131,3 +131,23 @@ class Comentario(models.Model):
         verbose_name = 'Comentário'
         verbose_name_plural = 'Comentários'
         ordering = ['data_criacao']
+
+
+# levar para signals.py
+def post_save_anuncio(sender, instance, created, **kwargs):
+    # import pdb
+    # pdb.set_trace()
+    if created:
+        assunto = instance.titulo
+        contexto = {
+            'anuncio': instance
+        }
+        template_name = 'anuncio_mail.html'
+        inscricoes = Inscricao.objects.filter(curso=instance.curso, status=Inscricao.INSCRITO_STATUS)
+
+        for inscricao in inscricoes:
+            lista_destinatarios = [inscricao.usuario.email]
+            envia_email_template(assunto, template_name, contexto, lista_destinatarios)
+
+
+models.signals.post_save.connect(post_save_anuncio, sender=Anuncio, dispatch_uid='post_save_anuncio')
