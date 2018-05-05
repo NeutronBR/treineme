@@ -2,6 +2,7 @@ from django.db import models
 # from django.conf import settings
 from django.contrib.auth import get_user_model
 from mail import envia_email_template
+from django.urls import reverse
 # Create your models here.
 
 
@@ -44,7 +45,6 @@ class Curso(models.Model):
     # @models.permalink # deprecated
     # outra forma de criar links para o curso
     def get_absolute_url(self):
-        from django.urls import reverse
         # from cursos import views
         # (URL, argumentos não nomeáveis, argumentos nomeáveis)
         # return('detalhes', (), {'atalho_curso': self.atalho})
@@ -65,6 +65,67 @@ class Curso(models.Model):
         verbose_name = 'Curso'
         verbose_name_plural = 'Cursos'
         ordering = ['nome']
+
+
+class Aula(models.Model):
+    nome = models.CharField(verbose_name='Nome', max_length=100)
+    descricao = models.TextField(verbose_name='Descrição', blank=True)
+    ordem = models.IntegerField('Número de ordem', blank=True, default=0)
+    curso = models.ForeignKey(Curso, verbose_name='Curso', related_name='aulas', on_delete=models.PROTECT)
+    atividade = models.BooleanField(verbose_name='Vincular ao término da unidade?', default=False)
+    data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de criação')
+    data_atualizacao = models.DateTimeField(auto_now=True, verbose_name='Data de atualização')
+
+    def __str__(self):
+        return self.nome
+
+    @staticmethod
+    def ultima_ordem(curso):
+        num = Aula.objects.filter(curso=curso).latest()
+        if not num:
+            return 1
+        else:
+            return num + 1
+
+    def aula_prox(self):
+        prox = Aula.objects.filter(curso=self.curso).filter(ordem__gt=self.ordem)
+        if prox:
+            return prox.first()
+        else:
+            return False
+
+    def aula_ant(self):
+        ant = Aula.objects.filter(curso=self.curso).filter(ordem__lt=self.ordem)
+        if ant:
+            return ant.last()
+        else:
+            return False
+
+    class Meta:
+        verbose_name = 'Aula'
+        verbose_name_plural = 'Aulas'
+        ordering = ['curso', 'ordem']
+        get_latest_by = ['curso', 'ordem']
+        unique_together = (('curso', 'ordem'))
+
+
+class Video(models.Model):
+    nome = models.CharField(verbose_name='Nome', max_length=100)
+    link = models.TextField(verbose_name='Link de acesso ao vídeo', blank=True)
+    arquivo = models.FileField(upload_to='aulas/videos', blank=True, null=True)
+    aula = models.ForeignKey(Aula, verbose_name='Aula', related_name='videos', on_delete=models.PROTECT)
+    data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de criação')
+    data_atualizacao = models.DateTimeField(auto_now=True, verbose_name='Data de atualização')
+
+    def is_embedded(self):
+        return bool(self.link)
+
+    def __str__(self):
+        return self.nome
+
+    class Meta:
+        verbose_name = 'Vídeo'
+        verbose_name_plural = 'Vídeos'
 
 
 class Inscricao(models.Model):
@@ -113,6 +174,9 @@ class Anuncio(models.Model):
 
     def __str__(self):
         return self.titulo
+
+    def get_absolute_url(self):
+        return reverse('cursos:anuncio_detalhes', args=[str(self.curso.atalho), self.pk])
 
     class Meta:
         verbose_name = 'Anúncio'
