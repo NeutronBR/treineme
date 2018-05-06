@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '0!3)pykibt!uld)qi@nx1uu8#+h^nq3vqcmvm&_r4nb+3z4=me'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -132,7 +132,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'treineme', 'media')
 MEDIA_URL = '/media/'
 
 # Auth

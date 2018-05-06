@@ -1,8 +1,8 @@
-{% extends "painel_curso.html" %}
+{% extends "anuncios.html" %}
 
 {% block breadcrumb %}
     {{ block.super }}
-    <li class="breadcrumb-item">{{ anuncio.titulo }}</li>
+    <li class="breadcrumb-item"><a href="{% url 'cursos:anuncio_detalhes' curso.atalho anuncio.pk %}">{{ anuncio }}</a></li>
 {% endblock breadcrumb %}
 
 

@@ -28,6 +28,7 @@ class AulaAdmin(admin.ModelAdmin):
     list_display = ['nome', 'ordem', 'curso']
     search_fields = ['nome']
     list_filter = ['curso']
+    # prepopulated_fields = {'ordem': Aula.ultima_ordem()}
 
     inlines = [
         VideoInlineAdmin,

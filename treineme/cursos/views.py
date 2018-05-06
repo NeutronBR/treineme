@@ -121,7 +121,7 @@ def aula_detalhes(request, atalho_curso, aula_pk):
     contexto = {
         'curso': curso,
         'aula': aula,
-        'videos': aula.videos.all(),
+        'videos': aula.videos.all().order_by('data_criacao'),
         # 'materiais_complementares': aula.materiais_complementares.all(),
     }
     return render(request, template, contexto)

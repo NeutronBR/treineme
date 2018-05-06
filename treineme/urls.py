@@ -16,9 +16,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
+# https://github.com/django/django/blob/master/django/conf/urls/static.py
+# funcao static apenas para servir arquivos estátivos em ambiente de producao
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', include('cursos.urls')),
     path('usuario/', include('usuarios.urls')),
     path('admin/', admin.site.urls),
 ]
+
+# configuracao para servir arquivos como os videos das aulas em ambiente de desenvolvimento
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# print(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))

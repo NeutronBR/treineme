@@ -50,7 +50,7 @@ class Curso(models.Model):
 
         # (This is discouraged because you can't reverse namespaced views this way.)
         # return reverse(views.detalhes, args=[str(self.atalho)]) # outra forma
-        return reverse('cursos:detalhes', args=[str(self.atalho)])
+        return reverse('cursos:anuncios', args=[str(self.atalho)])
 
 
     def get_aulas(self):

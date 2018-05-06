@@ -1,4 +1,4 @@
-{% extends "painel_curso.html" %}
+{% extends "aulas.html" %}
 
 {% block breadcrumb %}
     {{ block.super }}
@@ -45,9 +45,17 @@
                 <div class="mb-3 text-muted">
                     <small>Atualizado há {{ video.data_atualizacao|timesince }}</small>
                 </div>
+                {% if video.is_embedded %}
                 <div class="video-container">
                     {{ video.link|safe }}
                 </div>
+                {% else %}
+
+                <video class="video-local" src="{{ video.arquivo.url }}" controls poster="" preload="none">
+                    Seu navegador não suporta a exibição deste vídeo.
+                </video>
+
+                {% endif %}
             </div>
         </div>
     </div>

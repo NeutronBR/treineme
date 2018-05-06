@@ -1,4 +1,5 @@
 from django.urls import path
+from django.conf import settings
 from cursos.views import index, cursos, detalhes, inscricao, anuncios, anuncio_detalhes, aulas, aula_detalhes
 
 # app_name = namespace

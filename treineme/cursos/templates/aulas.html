@@ -19,7 +19,7 @@
             </div>
             <p>{{ aula.descricao|truncatewords:'40' }}</p>
             <p>
-                <a href="{% url 'cursos:aula_detalhes' curso.atalho aula.pk %}">
+                <a href="{% url 'cursos:aula_detalhes' curso.atalho aula.pk %}#accordion">
                     <i class="fa fa-video-camera fa-fw"></i>
                     {% with total_videos=aula.videos.count %}
                     {{ total_videos }}
