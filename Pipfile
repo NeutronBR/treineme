@@ -10,6 +10,7 @@ django = "*"
 [dev-packages]
 django-extensions = "*"
 "flake8" = "*"
+model-mommy = "*"
 
 [requires]
 python_version = "3.6"

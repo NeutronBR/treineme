@@ -9,7 +9,7 @@
                     <div class="card-body">
                         <p class="card-text">Instrutor: <strong>{{ curso.instrutor }}</strong></p>
                         <p class="card-text">{{ curso.descricao | linebreaks }}</p>
-                        <a href="{{ curso.get_absolute_url }}" class="btn btn-primary">Detalhes</a>
+                        <a href="{% url 'cursos:detalhes' curso.atalho %}" class="btn btn-primary">Detalhes</a>
                     </div>
                 </div>
             </div>
