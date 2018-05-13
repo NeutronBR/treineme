@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import dj_database_url
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,6 +27,7 @@ SECRET_KEY = '0!3)pykibt!uld)qi@nx1uu8#+h^nq3vqcmvm&_r4nb+3z4=me'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+# ALLOWED_HOSTS = ['gentle-crag-93407.herokuapp.com']
 ALLOWED_HOSTS = []
 
 
@@ -36,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+
+    'whitenoise.runserver_nostatic',
+
     'django.contrib.staticfiles',
 
     'widget_tweaks',
@@ -53,6 +59,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'urls'
@@ -73,22 +81,22 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'wsgi.application'
+WSGI_APPLICATION = 'treineme.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 #
-# DATABASES = {
-#     'default': {
+DATABASES = {
+    'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
 #         'NAME': 'banco',
 #         'USER': 'user',
 #         'PASSWORD': 'senha',
 #         'HOST': '',
 #         'PORT': '5432',
-#     }
-# }
+    }
+}
 
 
 # Password validation
@@ -127,7 +135,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Extra places for collectstatic to find static files.
+# STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR, 'static'),
+#     os.path.join(PROJECT_ROOT, 'static'),
+# )
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'treineme', 'media')
 MEDIA_URL = '/media/'
@@ -153,6 +169,17 @@ EMAIL_PORT = 587
 CONTACT_EMAIL = 'email@gmail.com'
 DEFAULT_FROM_EMAIL = '{} Treine-ME <{}> '.format(NOME_EMPRESA, CONTACT_EMAIL)
 
+
+# Change 'default' database configuration with $DATABASE_URL.
+# import dj_database_url
+db = dj_database_url.config()
+# db = dj_database_url.config(conn_max_age=500, ssl_require=True)
+DATABASES['default'].update(db)
+# DATABASES['default'].['CONN_MAX_AGE'] = 500
+
+
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 try:
     from local_settings import *
