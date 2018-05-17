@@ -1,1 +1,1 @@
-web: gunicorn treineme.wsgi --log-file -
+web: gunicorn --pythonpath treineme treineme.wsgi --log-file -

@@ -27,8 +27,7 @@ SECRET_KEY = '0!3)pykibt!uld)qi@nx1uu8#+h^nq3vqcmvm&_r4nb+3z4=me'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-# ALLOWED_HOSTS = ['gentle-crag-93407.herokuapp.com']
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['mighty-castle-93813.herokuapp.com']
 
 
 # Application definition
@@ -172,11 +171,10 @@ DEFAULT_FROM_EMAIL = '{} Treine-ME <{}> '.format(NOME_EMPRESA, CONTACT_EMAIL)
 
 # Change 'default' database configuration with $DATABASE_URL.
 # import dj_database_url
-db = dj_database_url.config()
+db = dj_database_url.config(conn_max_age=600)
 # db = dj_database_url.config(conn_max_age=500, ssl_require=True)
 DATABASES['default'].update(db)
 # DATABASES['default'].['CONN_MAX_AGE'] = 500
-
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
