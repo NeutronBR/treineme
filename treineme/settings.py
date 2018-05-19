@@ -23,7 +23,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = '0!3)pykibt!uld)qi@nx1uu8#+h^nq3vqcmvm&_r4nb+3z4=me'
-SECRET_KEY = os.getenv('SECRET_KEY', 'ValorOpcional')
+# SECRET_KEY = os.getenv('SECRET_KEY', 'Valor padrão opcional')
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -163,10 +164,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'email@gmail.com'
-EMAIL_HOST_PASSWORD = 'password'
 EMAIL_PORT = 587
-CONTACT_EMAIL = 'email@gmail.com'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+CONTACT_EMAIL = os.getenv('CONTACT_EMAIL')
 DEFAULT_FROM_EMAIL = '{} Treine-ME <{}> '.format(NOME_EMPRESA, CONTACT_EMAIL)
 
 
