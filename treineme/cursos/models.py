@@ -98,6 +98,9 @@ class Aula(models.Model):
         else:
             return False
 
+    def get_absolute_url(self):
+        return reverse('cursos:aula_detalhes', args=[str(self.curso.atalho), str(self.pk)])
+
     class Meta:
         verbose_name = 'Aula'
         verbose_name_plural = 'Aulas'
