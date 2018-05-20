@@ -49,12 +49,12 @@
                 <div class="video-container">
                     {{ video.link|safe }}
                 </div>
-                {% else %}
-
+                {% elif video.arquivo %}
                 <video class="video-local" src="{{ video.arquivo.url }}" controls poster="" preload="none">
                     Seu navegador não suporta a exibição deste vídeo.
                 </video>
-
+                {% else %}
+                <p>Nenhum vídeo foi encontrado para este item</p>
                 {% endif %}
             </div>
         </div>
