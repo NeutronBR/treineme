@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from cursos.models import Curso, Inscricao, Anuncio, Aula
+from cursos.models import Curso, Inscricao, Anuncio, Aula, MaterialComplementar
 from cursos.forms import ContatoCurso, ComentarioForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -122,6 +122,6 @@ def aula_detalhes(request, atalho_curso, aula_pk):
         'curso': curso,
         'aula': aula,
         'videos': aula.videos.all().order_by('data_criacao'),
-        # 'materiais_complementares': aula.materiais_complementares.all(),
+        'materiais_complementares': aula.complementares.all(),
     }
     return render(request, template, contexto)

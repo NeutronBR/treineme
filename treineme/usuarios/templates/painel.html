@@ -36,6 +36,11 @@
                     </li>
                 </ul>
                 {% endblock menu_painel %}
+                {% block tags %}
+                <h6 class="mx-3 py-1"><i class="fa fa-tags" aria-hidden="true"></i> Tags</h6>
+                <ul class="nav flex-column nav-pills mb-2">
+                </ul>
+                {% endblock %}
             </nav>
         </div>
 
@@ -53,6 +58,10 @@
                                 <small>Última atualização em: {{ inscricao.curso.data_atualizacao|date:'d/m/Y'|default:'Sem data' }}</small>
                             </div>
                             <p>{{ inscricao.curso.descricao|linebreaks }}</p>
+                            <i class="fa fa-tags" aria-hidden="true"></i> Tags:
+                            {% for tag in inscricao.curso.tags.all %}
+                            {{ tag }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
                         </a>
                         {% empty %}
                         <div class="alert alert-info" role="alert">

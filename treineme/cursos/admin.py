@@ -1,5 +1,5 @@
 from django.contrib import admin
-from cursos.models import Curso, Categoria, Inscricao, Anuncio, Comentario, Aula, Video
+from cursos.models import Curso, Categoria, Inscricao, Anuncio, Comentario, Aula, Video, MaterialComplementar
 # Register your models here.
 
 
@@ -24,6 +24,10 @@ class VideoInlineAdmin(admin.TabularInline):
     model = Video
 
 
+class ComplementarInlineAdmin(admin.TabularInline):
+    model = MaterialComplementar
+
+
 class AulaAdmin(admin.ModelAdmin):
     list_display = ['nome', 'ordem', 'curso']
     search_fields = ['nome']
@@ -31,7 +35,7 @@ class AulaAdmin(admin.ModelAdmin):
     # prepopulated_fields = {'ordem': Aula.ultima_ordem()}
 
     inlines = [
-        VideoInlineAdmin,
+        VideoInlineAdmin, ComplementarInlineAdmin
     ]
 
 

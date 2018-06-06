@@ -66,5 +66,32 @@
         </div>
     </div>
     {% endfor %}
+
+    {% if materiais_complementares %}
+    <div class="card">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse-complementar" aria-expanded="true" aria-controls="collapse-complementar">
+            <div class="card-header" role="tab" id="heading-complementar">
+                <h5 class="mb-0">
+                        Materiais Complementares
+                        <i class="fa fa-angle-down float-right" aria-hidden="true"></i>
+                </h5>
+            </div>
+        </a>
+        <div id="collapse-complementar" class="collapse" role="tabpanel" aria-labelledby="heading-complementar">
+            <div class="card-body">
+                <ul class="list-group">
+                {% for material in materiais_complementares %}
+                    <a href="{{ material.arquivo.url }}" target="_blank">
+                        <li class="list-group-item">
+                            {{ material.titulo }}
+                            <small class="float-right">Atualizado há {{ material.data_atualizacao|timesince }}</small>
+                        </li>
+                    </a>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 </div>
 {% endblock conteudo %}

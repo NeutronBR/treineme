@@ -9,6 +9,11 @@
                     <div class="card-body">
                         <p class="card-text">Instrutor: <strong>{{ curso.instrutor }}</strong></p>
                         <p class="card-text">{{ curso.descricao | linebreaks }}</p>
+                        <p class="card-text">
+                            {% for tag in curso.tags.all %}
+                            <a href="#" class="mr-2 tags"><i class="fa fa-tag" aria-hidden="true"></i> {{ tag }}</a>
+                            {% endfor %}
+                        </p>
                         <a href="{% url 'cursos:detalhes' curso.atalho %}" class="btn btn-primary">Detalhes</a>
                     </div>
                 </div>

@@ -183,6 +183,8 @@ DATABASES['default'].update(db)
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
+TAGGIT_CASE_INSENSITIVE = True
+
 try:
     from local_settings import *
     from django.contrib.messages import constants as messages
@@ -198,3 +200,7 @@ try:
 
 except ImportError as e:
     print(e)
+
+
+
+# Video.objects.filter(aula__in=Aula.objects.filter(curso=curso))

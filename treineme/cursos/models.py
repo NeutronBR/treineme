@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from mail import envia_email_template
 from django.urls import reverse
+from taggit.managers import TaggableManager
 # Create your models here.
 
 
@@ -35,6 +36,8 @@ class Curso(models.Model):
     categoria = models.ForeignKey(Categoria, models.SET_NULL, null=True, blank=False)
     data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de criação')
     data_atualizacao = models.DateTimeField(auto_now=True, verbose_name='Data de atualização')
+
+    tags = TaggableManager()
 
     objects = CursoManager()
 
@@ -110,7 +113,7 @@ class Aula(models.Model):
 
 
 class Video(models.Model):
-    nome = models.CharField(verbose_name='Nome', max_length=100)
+    titulo = models.CharField(verbose_name='Título', max_length=100)
     link = models.TextField(verbose_name='Link de acesso ao vídeo', blank=True)
     arquivo = models.FileField(upload_to='aulas/videos', blank=True, null=True)
     aula = models.ForeignKey(Aula, verbose_name='Aula', related_name='videos', on_delete=models.PROTECT)
@@ -121,11 +124,27 @@ class Video(models.Model):
         return bool(self.link)
 
     def __str__(self):
-        return self.nome
+        return self.titulo
 
     class Meta:
         verbose_name = 'Vídeo'
         verbose_name_plural = 'Vídeos'
+
+
+class MaterialComplementar(models.Model):
+    titulo = models.CharField(verbose_name='Título', max_length=100)
+    arquivo = models.FileField(upload_to='aulas/materiais_complementares')
+    aula = models.ForeignKey(Aula, verbose_name='Aula', related_name='complementares', on_delete=models.PROTECT)
+
+    data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de criação')
+    data_atualizacao = models.DateTimeField(auto_now=True, verbose_name='Data de atualização')
+
+    def __str__(self):
+        return self.titulo
+
+    class Meta:
+        verbose_name = 'Material complementar'
+        verbose_name_plural = 'Materiais complementares'
 
 
 class Inscricao(models.Model):
