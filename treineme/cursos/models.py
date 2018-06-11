@@ -165,6 +165,8 @@ class Inscricao(models.Model):
     data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de criação')
     data_atualizacao = models.DateTimeField(auto_now=True, verbose_name='Data de atualização')
 
+    videos_assistidos = models.ManyToManyField(Video)
+
     def __str__(self):
         return '{} inscrito em {}'.format(self.usuario.get_full_name(), self.curso)
 

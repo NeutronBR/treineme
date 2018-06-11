@@ -204,3 +204,4 @@ except ImportError as e:
 
 
 # Video.objects.filter(aula__in=Aula.objects.filter(curso=curso))
+# Aula.objects.filter(curso__inscricao__usuario='Bruno')

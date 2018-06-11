@@ -14,6 +14,8 @@
         <div class="card-subtitle text-muted">
             <small>Atualizado há {{ aula.data_atualizacao|timesince }}</small>
         </div>
+    </div>
+    <div class="card-body">
         <p class="card_text">{{ aula.descricao|linebreaksbr }}</p>
         {% if aula.aula_ant %}
         <a href="{% url 'cursos:aula_detalhes' curso.atalho aula.aula_ant.pk %}" title="Aula anterior">
@@ -28,70 +30,52 @@
     </div>
 </div>
 
-
-<div id="accordion" role="tablist" aria-multiselectable="true">
-    {% for video in videos %}
-    <div class="card">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{ video.pk }}" aria-expanded="true" aria-controls="collapse{{ video.pk }}">
-            <div class="card-header" role="tab" id="heading{{ video.pk }}">
-                <h5 class="mb-0">
-                    {{ video }}
-                    <i class="fa fa-angle-down float-right" aria-hidden="true"></i>
-                </h5>
-            </div>
-        </a>
-        <div id="collapse{{ video.pk }}" class="collapse" role="tabpanel" aria-labelledby="heading{{ video.pk }}">
-            <div class="card-body">
-                <div class="mb-3 text-muted">
-                    <small>Atualizado há {{ video.data_atualizacao|timesince }}</small>
-                </div>
-                {% if video.is_embedded %}
-                <div class="video-container">
-                    {{ video.link|safe }}
-                </div>
-                {% elif video.arquivo %}
-                <video class="video-local" src="{{ video.arquivo.url }}" controls poster="" preload="none">
-                    Seu navegador não suporta a exibição deste vídeo.
-                </video>
-                {% else %}
-                <p>Nenhum vídeo foi encontrado para este item</p>
-                {% endif %}
-            </div>
+<div class="card">
+    <a data-toggle="collapse" data-parent="#accordion" href="#collapse-video" aria-expanded="true" aria-controls="collapse-video">
+        <div class="card-header" role="tab" id="heading-video">
+            <h3 class="card-title">Vídeos<i class="fa fa-angle-down float-right" aria-hidden="true"></i></h3>
         </div>
+    </a>
+    <div id="collapse-video" class="collapse" role="tabpanel" aria-labelledby="heading-video">
+        <ul class="list-group">
+            {% for video in videos %}
+            <a href="{% url 'cursos:video_detalhes' curso.atalho video.pk %}">
+                <li class="list-group-item">
+                    <h5>{{ video }}</h5>
+                    <small>Última atualização em: {{ video.data_atualizacao }}</small>
+                </li>
+            </a>
+            {% empty %}
+            {% endfor %}
+        </ul>
     </div>
-    {% empty %}
-    <div class="card">
-        <div class="card-header">
-            <h5 class="mb-0">Não há vídeo cadastrado</h5>
-        </div>
-    </div>
-    {% endfor %}
-
-    {% if materiais_complementares %}
-    <div class="card">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapse-complementar" aria-expanded="true" aria-controls="collapse-complementar">
-            <div class="card-header" role="tab" id="heading-complementar">
-                <h5 class="mb-0">
-                        Materiais Complementares
-                        <i class="fa fa-angle-down float-right" aria-hidden="true"></i>
-                </h5>
-            </div>
-        </a>
-        <div id="collapse-complementar" class="collapse" role="tabpanel" aria-labelledby="heading-complementar">
-            <div class="card-body">
-                <ul class="list-group">
-                {% for material in materiais_complementares %}
-                    <a href="{{ material.arquivo.url }}" target="_blank">
-                        <li class="list-group-item">
-                            {{ material.titulo }}
-                            <small class="float-right">Atualizado há {{ material.data_atualizacao|timesince }}</small>
-                        </li>
-                    </a>
-                {% endfor %}
-                </ul>
-            </div>
-        </div>
-    </div>
-    {% endif %}
 </div>
+
+{% if materiais_complementares %}
+<div class="card">
+    <a data-toggle="collapse" data-parent="#accordion" href="#collapse-complementar" aria-expanded="true" aria-controls="collapse-complementar">
+        <div class="card-header" role="tab" id="heading-complementar">
+            <h5 class="mb-0">
+                    Materiais Complementares
+                    <i class="fa fa-angle-down float-right" aria-hidden="true"></i>
+            </h5>
+        </div>
+    </a>
+    <div id="collapse-complementar" class="collapse" role="tabpanel" aria-labelledby="heading-complementar">
+        <div class="card-body">
+            <ul class="list-group">
+            {% for material in materiais_complementares %}
+                <a href="{{ material.arquivo.url }}" target="_blank">
+                    <li class="list-group-item">
+                        {{ material.titulo }}
+                        <small class="float-right">Atualizado há {{ material.data_atualizacao|timesince }}</small>
+                    </li>
+                </a>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 {% endblock conteudo %}
