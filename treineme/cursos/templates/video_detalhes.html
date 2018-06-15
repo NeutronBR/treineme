@@ -8,16 +8,16 @@
 {% endblock breadcrumb %}
 
 {% block conteudo %}
-
+<h4>{{ video }}</h4>
 {% if video.is_embedded %}
 <div class="video-container">
     <!-- <div id="ytplayer"></div> -->
-    <iframe id="ytplayer" onload="videoCarregou()" frameborder="0" allowfullscreen="1" enablejsapi="1" allow="autoplay; encrypted-media" title="YouTube video player" width="640" height="360" src="https://www.youtube.com/embed/{{ video.link }}?enablejsapi=1">
+    <iframe id="ytplayer" onload="videoCarregou()" frameborder="0" allowfullscreen="1" enablejsapi="1" allow="autoplay; encrypted-media" title="YouTube video player" width="640" height="360" src="https://www.youtube.com/embed/{{ video.link }}?enablejsapi=1">    
     </iframe>
 </div>
 
 {% elif video.arquivo %}
-<video class="video-local" src="{{ video.arquivo.url }}" controls poster="" preload="none" onended="videoFinalizou({{ video.pk }})">
+<video class="video-local" src="{{ video.arquivo.url }}" controls poster="" preload="meta" onended="videoFinalizou({{ video.pk }})">
     Seu navegador não suporta a exibição deste vídeo.
 </video>
 {% else %}

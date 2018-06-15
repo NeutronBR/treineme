@@ -1,9 +1,9 @@
 from django.db import models
 # from django.conf import settings
 from django.contrib.auth import get_user_model
-from mail import envia_email_template
 from django.urls import reverse
 from taggit.managers import TaggableManager
+from cursos.signals import pre_save_video, post_save_anuncio
 # Create your models here.
 
 
@@ -114,7 +114,7 @@ class Aula(models.Model):
 
 class Video(models.Model):
     titulo = models.CharField(verbose_name='Título', max_length=100)
-    link = models.TextField(verbose_name='Link de acesso ao vídeo', blank=True)
+    link = models.CharField(verbose_name='ID do vídeo no YouTube', blank=True, max_length=150, help_text="Insira aqui o link completo para o vídeo no YouTube")
     arquivo = models.FileField(upload_to='aulas/videos', blank=True, null=True)
     aula = models.ForeignKey(Aula, verbose_name='Aula', related_name='videos', on_delete=models.PROTECT)
     data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de criação')
@@ -125,6 +125,9 @@ class Video(models.Model):
 
     def __str__(self):
         return self.titulo
+
+    def get_absolute_url(self):
+        return reverse('cursos:video_detalhes', args=[str(self.aula.curso.atalho), str(self.pk)])
 
     class Meta:
         verbose_name = 'Vídeo'
@@ -186,6 +189,40 @@ class Inscricao(models.Model):
         unique_together = (('curso', 'usuario'),)
 
 
+class Questao(models.Model):
+    aula = models.ForeignKey(Aula, related_name='questoes', on_delete=models.PROTECT)
+    enunciado = models.TextField(verbose_name='Questão', blank=False)
+    disponivel = models.BooleanField('Disponível', default=True)
+    alternativa_correta = models.TextField(verbose_name='Alternativa correta', blank=False)
+
+    data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de criação')
+    data_atualizacao = models.DateTimeField(auto_now=True, verbose_name='Data de atualização')
+
+    def __str__(self):
+        return self.enunciado
+
+    class Meta:
+        verbose_name = 'Questão'
+        verbose_name_plural = 'Questões'
+        ordering = ['aula']
+
+
+class Alternativa(models.Model):
+    texto = models.TextField(max_length=100, blank=False)
+    questao = models.ForeignKey(Questao, related_name="alternativas_erradas", on_delete=models.PROTECT)
+
+    data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de criação')
+    data_atualizacao = models.DateTimeField(auto_now=True, verbose_name='Data de atualização')
+
+    def __str__(self):
+        return self.texto
+
+    class Meta:
+        verbose_name = 'Alternativa incorreta'
+        verbose_name_plural = 'Alternativas incorretas'
+        ordering = ['questao']
+
+
 class Anuncio(models.Model):
     curso = models.ForeignKey(Curso, verbose_name='Curso', on_delete=models.PROTECT, related_name='anuncios')
     titulo = models.CharField(verbose_name='Título', max_length=100)
@@ -218,21 +255,6 @@ class Comentario(models.Model):
         ordering = ['data_criacao']
 
 
-# levar para signals.py
-def post_save_anuncio(sender, instance, created, **kwargs):
-    # import pdb
-    # pdb.set_trace()
-    if created:
-        assunto = instance.titulo
-        contexto = {
-            'anuncio': instance
-        }
-        template_name = 'anuncio_mail.html'
-        inscricoes = Inscricao.objects.filter(curso=instance.curso, status=Inscricao.INSCRITO_STATUS)
-
-        for inscricao in inscricoes:
-            lista_destinatarios = [inscricao.usuario.email]
-            envia_email_template(assunto, template_name, contexto, lista_destinatarios)
-
 
 models.signals.post_save.connect(post_save_anuncio, sender=Anuncio, dispatch_uid='post_save_anuncio')
+models.signals.pre_save.connect(pre_save_video, sender=Video, dispatch_uid='pre_save_video')

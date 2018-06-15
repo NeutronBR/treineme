@@ -71,6 +71,10 @@ body {
 .painel-usuario h6 {
     border-bottom: 1px solid lightgrey;
 }
+.painel-usuario ul {
+    list-style-type: none;
+    padding: 0;
+}
 #accordionnn {
     border: 0px;
 }
@@ -89,7 +93,8 @@ overflow: hidden;
 }
 .video-container iframe,
 .video-container object,
-.video-container embed {
+.video-container embed,
+.video-container iframe {
 position: absolute;
 top: 0;
 left: 0;

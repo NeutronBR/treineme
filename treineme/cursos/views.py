@@ -123,6 +123,7 @@ def aula_detalhes(request, atalho_curso, aula_pk):
         'aula': aula,
         'videos': aula.videos.all().order_by('data_criacao'),
         'materiais_complementares': aula.complementares.all(),
+        'questionario': aula.questoes.exists(),
     }
     return render(request, template, contexto)
 
@@ -137,5 +138,19 @@ def video_detalhes(request, atalho_curso, video_pk):
         'curso': curso,
         'video': video,
         'aula': video.aula
+    }
+    return render(request, template, contexto)
+
+
+@login_required
+@inscricao_requerida
+def questionario(request, atalho_curso, aula_pk):
+    curso = get_object_or_404(Curso, atalho=atalho_curso)
+    aula = get_object_or_404(Aula, pk=aula_pk)
+    template = 'questionario.html'
+    contexto = {
+        'curso': curso,
+        'aula': aula,
+        'questoes': aula.questoes.all()
     }
     return render(request, template, contexto)

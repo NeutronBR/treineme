@@ -1,0 +1,26 @@
+{% extends "aula_detalhes.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    <li class="breadcrumb-item">
+        <a href="{% url 'cursos:questionario' curso.atalho aula.pk %}">Questionário</a>
+    </li>
+{% endblock breadcrumb %}
+
+{% block conteudo %}
+<h4>Questionário</h4>
+{% for questao in questoes %}
+<div>
+    <p>{{ questao }}</p>
+    <p>{{ questao.alternativa_correta }}</p>
+
+    {% for alternativa in questao.alternativas_erradas.all %}
+    <p>{{ alternativa }}</p>
+    {% endfor %}    
+    <br />
+</div>
+{% empty %}
+<p>Nenhuma questão foi encontrada para este curso</p>
+{% endfor %}
+
+{% endblock conteudo %}

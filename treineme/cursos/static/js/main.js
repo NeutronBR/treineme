@@ -35,11 +35,18 @@ function onPlayerStateChange(event) {
 }
 
 function videoCarregou(event){
-    console.log('video carregado')
+    console.log('video carregado');
 }
 
 function videoFinalizou(id) {
 
-    alert("The video has ended " + id);
+    console.log('O vídeo ' + id + ' terminou');
 
+}
+
+
+function youtube_parser(url){
+    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+    var match = url.match(regExp);
+    return (match&&match[7].length==11)? ("https://www.youtube.com/embed/" + match[7] + "?enablejsapi=1") : false;
 }

@@ -17,6 +17,11 @@
     </div>
     <div class="card-body">
         <p class="card_text">{{ aula.descricao|linebreaksbr }}</p>
+
+        {% if questionario %}
+        <h4><a href="{% url 'cursos:questionario' curso.atalho aula.pk %}">Questionário</a></h4>
+        {% endif %}
+
         {% if aula.aula_ant %}
         <a href="{% url 'cursos:aula_detalhes' curso.atalho aula.aula_ant.pk %}" title="Aula anterior">
             <i class="fa fa-chevron-left float-left" aria-hidden="true"></i>
