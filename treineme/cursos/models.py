@@ -193,7 +193,6 @@ class Questao(models.Model):
     aula = models.ForeignKey(Aula, related_name='questoes', on_delete=models.PROTECT)
     enunciado = models.TextField(verbose_name='Questão', blank=False)
     disponivel = models.BooleanField('Disponível', default=True)
-    alternativa_correta = models.TextField(verbose_name='Alternativa correta', blank=False)
 
     data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de criação')
     data_atualizacao = models.DateTimeField(auto_now=True, verbose_name='Data de atualização')
@@ -208,8 +207,9 @@ class Questao(models.Model):
 
 
 class Alternativa(models.Model):
-    texto = models.TextField(max_length=100, blank=False)
-    questao = models.ForeignKey(Questao, related_name="alternativas_erradas", on_delete=models.PROTECT)
+    texto = models.CharField(max_length=100, blank=False)
+    questao = models.ForeignKey(Questao, related_name="alternativas", on_delete=models.PROTECT)
+    correta = models.BooleanField('Correta?', default=False)
 
     data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de criação')
     data_atualizacao = models.DateTimeField(auto_now=True, verbose_name='Data de atualização')
@@ -218,9 +218,9 @@ class Alternativa(models.Model):
         return self.texto
 
     class Meta:
-        verbose_name = 'Alternativa incorreta'
-        verbose_name_plural = 'Alternativas incorretas'
-        ordering = ['questao']
+        verbose_name = 'Alternativa'
+        verbose_name_plural = 'Alternativas'
+        ordering = ['?']
 
 
 class Anuncio(models.Model):

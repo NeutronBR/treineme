@@ -35,7 +35,7 @@ class ComplementarInlineAdmin(admin.TabularInline):
 
 class QuestaoInline(admin.TabularInline):
     model = Questao
-    fields = ['enunciado', 'disponivel', 'alternativa_correta']
+    fields = ['enunciado', 'disponivel']
     extra = 1
     show_change_link = True
 
@@ -51,15 +51,16 @@ class AulaAdmin(admin.ModelAdmin):
     ]
 
 
-class AlternativaInline(admin.StackedInline):
+class AlternativaInline(admin.TabularInline):
     model = Alternativa
-    fields = ['texto', ]
+    fields = ['texto', 'correta']
     extra = 1
+    ordering = ['-correta', '-data_atualizacao']
 
 
 class QuestaoAdmin(admin.ModelAdmin):
     readonly_fields = ['aula']
-    list_display = ['enunciado', 'alternativa_correta']
+    list_display = ['enunciado',]
     inlines = [AlternativaInline]
     list_filter = ['aula__curso', 'aula']
 

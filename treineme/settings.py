@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'usuarios',
     'cursos',
     # 'cursos.apps.CursosConfig',
-    'forum',
 ]
 
 MIDDLEWARE = [
