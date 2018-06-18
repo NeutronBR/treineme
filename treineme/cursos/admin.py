@@ -1,5 +1,5 @@
 from django.contrib import admin
-from cursos.models import Curso, Categoria, Inscricao, Anuncio, Comentario, Aula, Video, MaterialComplementar, Questao, Alternativa
+from cursos.models import Curso, Categoria, Inscricao, Anuncio, Comentario, Aula, Video, MaterialComplementar, Questao, Alternativa, Resposta
 from django.shortcuts import reverse
 # Register your models here.
 
@@ -60,7 +60,7 @@ class AlternativaInline(admin.TabularInline):
 
 class QuestaoAdmin(admin.ModelAdmin):
     readonly_fields = ['aula']
-    list_display = ['enunciado',]
+    list_display = ['enunciado']
     inlines = [AlternativaInline]
     list_filter = ['aula__curso', 'aula']
 
@@ -69,6 +69,6 @@ admin.site.register(Curso, CursoAdmin)
 admin.site.register(Categoria, CategoriaAdmin)
 admin.site.register(Inscricao, InscricaoAdmin)
 # O registro de admin não exige a criação de uma classe
-admin.site.register([Anuncio, Comentario, Video])
+admin.site.register([Anuncio, Comentario, Video, Resposta])
 admin.site.register(Aula, AulaAdmin)
 admin.site.register(Questao, QuestaoAdmin)

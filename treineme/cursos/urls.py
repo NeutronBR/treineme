@@ -1,6 +1,6 @@
 from django.urls import path
-from django.conf import settings
-from cursos.views import index, cursos, detalhes, inscricao, anuncios, anuncio_detalhes, aulas, aula_detalhes, video_detalhes, questionario
+# from django.conf import settings
+from cursos.views import index, cursos, detalhes, inscricao, anuncios, anuncio_detalhes, aulas, aula_detalhes, video_detalhes, questionario, resposta
 
 # app_name = namespace
 app_name = 'cursos'
@@ -15,4 +15,5 @@ urlpatterns = [
     path('curso/<slug:atalho_curso>/aula/<int:aula_pk>', aula_detalhes, name='aula_detalhes'),
     path('curso/<slug:atalho_curso>/video/<int:video_pk>', video_detalhes, name='video_detalhes'),
     path('curso/<slug:atalho_curso>/aula/<int:aula_pk>/questionario', questionario, name='questionario'),
+    path('curso/<slug:atalho_curso>/aula/<int:aula_pk>/questao/<int:questao_pk>', resposta, name='resposta'),
 ]

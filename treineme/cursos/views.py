@@ -1,9 +1,10 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from cursos.models import Curso, Inscricao, Anuncio, Aula, MaterialComplementar, Video
+from django.shortcuts import render, get_object_or_404, redirect, reverse
+from cursos.models import Curso, Inscricao, Anuncio, Aula, Video, Questao, Resposta, Alternativa
 from cursos.forms import ContatoCurso, ComentarioForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from cursos.decorators import inscricao_requerida
+from django.template.defaultfilters import pluralize
 # from django.http import HttpResponse
 
 # Create your views here.
@@ -145,12 +146,60 @@ def video_detalhes(request, atalho_curso, video_pk):
 @login_required
 @inscricao_requerida
 def questionario(request, atalho_curso, aula_pk):
+    template = 'questionario.html'
     curso = get_object_or_404(Curso, atalho=atalho_curso)
     aula = get_object_or_404(Aula, pk=aula_pk)
-    template = 'questionario.html'
+    # inscricao = Inscricao.objects.get(curso=curso, usuario=request.user)
+
     contexto = {
         'curso': curso,
         'aula': aula,
-        'questoes': aula.questoes.all()
+        'questoes': aula.questoes.all(),
+        'ult_resposta': Resposta.ultima_reposta(aula, request.user),
+        'pontos': Resposta.pontuacao_questionario(aula, request.user)
     }
     return render(request, template, contexto)
+
+
+@login_required
+@inscricao_requerida
+def resposta(request, atalho_curso, aula_pk, questao_pk):
+
+    template_name = 'questao.html'
+    curso = get_object_or_404(Curso, atalho=atalho_curso)
+    aula = get_object_or_404(Aula, pk=aula_pk)
+    questao = get_object_or_404(Questao, pk=questao_pk)
+    inscricao = Inscricao.objects.get(usuario=request.user, curso=curso)
+
+    # import pdb
+    # pdb.set_trace()
+
+    # form = RespostaForm(request.POST or None)
+    # form.fields['alternativas'].queryset = Alternativa.objects.filter(questao=questao)
+    if request.method == 'POST':
+        # se o post tiver uma alternativa selecionada
+        alternativa = Alternativa.objects.get(pk=request.POST.get('alternativa')) if request.POST.get('alternativa') else ''
+
+        if alternativa:
+            campos = {
+                'enunciado': questao.enunciado,
+                'alternativa_escolhida': alternativa.texto,
+                'acerto': alternativa.correta
+            }
+            resposta, criado = Resposta.objects.update_or_create(inscricao=inscricao, questao=questao, enunciado=questao.enunciado, defaults=campos)
+
+            questao = questao.prox_questao()
+        else:
+            messages.warning(request, 'Você deve escolher uma opção')
+
+    contexto = {
+        'curso': curso,
+        'aula': aula,
+        'questao': questao
+    }
+    if questao:
+        return render(request, template_name, contexto)
+    else:
+        respostas = Resposta.pontuacao_questionario(aula, request.user)
+        messages.success(request, 'Você acertou {} quest{}'.format(respostas, pluralize(respostas, "ão,ões")))
+        return redirect(reverse('cursos:aula_detalhes', kwargs={'atalho_curso': atalho_curso, 'aula_pk': aula.pk}))

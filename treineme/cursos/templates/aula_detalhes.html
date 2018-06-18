@@ -19,7 +19,7 @@
         <p class="card_text">{{ aula.descricao|linebreaksbr }}</p>
 
         {% if questionario %}
-        <h4><a href="{% url 'cursos:questionario' curso.atalho aula.pk %}">Questionário</a></h4>
+        <h4 class="mb-4"><a href="{% url 'cursos:questionario' curso.atalho aula.pk %}">Questionário</a></h4>
         {% endif %}
 
         {% if aula.aula_ant %}

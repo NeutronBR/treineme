@@ -1,0 +1,37 @@
+{% extends "questionario.html" %}
+{% load widget_tweaks %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    <!-- <li class="breadcrumb-item">
+        <a href="{% url 'cursos:questionario' curso.atalho aula.pk %}">Questionário</a>
+    </li> -->
+{% endblock breadcrumb %}
+
+{% block conteudo %}
+
+<form action="{% url 'cursos:resposta' curso.atalho aula.pk questao.pk %}" method="post">
+    {% csrf_token %}
+    <h4 class="mb-4">{{ questao }}</h4>
+    {% for erro in formulario.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ erro }}
+        </div>
+    {% endfor %}
+    <fieldset class="form-group">
+    {% for alternativa in questao.alternativas.all %}
+        <div class="form-check">
+            <input type="radio" class="form-check-input" name="alternativa" id="alt-{{ alternativa.pk }}" value="{{ alternativa.pk }}" />
+            <label for="alt-{{ alternativa.pk }}">{{ alternativa.texto }}</label>
+        </div>
+    {% endfor %}
+    <!-- {% for campo in formulario %}
+    <div class="form-check">
+        {{ campo }}
+    </div>
+    {% endfor %} -->
+    </fieldset>
+    <button class="btn btn-lg btn-primary btn-block mt-4" type="submit">Responder</button>
+</form>
+
+{% endblock conteudo %}

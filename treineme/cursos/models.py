@@ -168,7 +168,7 @@ class Inscricao(models.Model):
     data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de criação')
     data_atualizacao = models.DateTimeField(auto_now=True, verbose_name='Data de atualização')
 
-    videos_assistidos = models.ManyToManyField(Video)
+    videos_assistidos = models.ManyToManyField(Video, blank=True)
 
     def __str__(self):
         return '{} inscrito em {}'.format(self.usuario.get_full_name(), self.curso)
@@ -200,10 +200,16 @@ class Questao(models.Model):
     def __str__(self):
         return self.enunciado
 
+    def prox_questao(self):
+        queryset = Questao.objects.filter(aula=self.aula)
+        for i, questao in enumerate(queryset):
+            if (questao == self) and (self != queryset.last()):
+                return queryset[i + 1]
+
     class Meta:
         verbose_name = 'Questão'
         verbose_name_plural = 'Questões'
-        ordering = ['aula']
+        ordering = ['aula', 'data_atualizacao']
 
 
 class Alternativa(models.Model):
@@ -221,6 +227,41 @@ class Alternativa(models.Model):
         verbose_name = 'Alternativa'
         verbose_name_plural = 'Alternativas'
         ordering = ['?']
+
+
+class Resposta(models.Model):
+    # Matrícula respondendo ao questionário da aula
+    inscricao = models.ForeignKey(Inscricao, related_name='respostas', on_delete=models.PROTECT)
+    questao = models.ForeignKey(Questao, related_name='respostas', on_delete=models.PROTECT)
+    enunciado = models.TextField('Enunciado', blank=False)
+    alternativa_escolhida = models.CharField('Alternativa selecionada', max_length=100, blank=False)
+    acerto = models.BooleanField('Acertou', default=False)
+
+    data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de criação')
+    data_atualizacao = models.DateTimeField(auto_now=True, verbose_name='Data de atualização')
+
+    def __str__(self):
+        return self.enunciado
+
+    @staticmethod
+    def ultima_reposta(aula, usuario):
+        return(Resposta.objects.filter(
+            questao__aula=aula,
+            inscricao=Inscricao.objects.get(curso=aula.curso, usuario=usuario)
+        ).last())
+
+
+    @staticmethod
+    def pontuacao_questionario(aula, usuario):
+        inscricao = Inscricao.objects.get(usuario=usuario, curso=aula.curso)
+        respostas = Resposta.objects.filter(inscricao=inscricao, acerto=True, questao__aula=aula).count()
+        return(respostas)
+
+    class Meta:
+        verbose_name = 'Resposta'
+        verbose_name_plural = 'Respostas'
+        ordering = ['inscricao', 'data_atualizacao']
+        unique_together = ('inscricao', 'questao')
 
 
 class Anuncio(models.Model):

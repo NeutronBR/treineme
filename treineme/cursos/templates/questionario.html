@@ -10,39 +10,12 @@
 {% block conteudo %}
 <h4>Questionário</h4>
 <div>
-    {% for alternativa in questao.alternativas.all %}
-    <p>{{ alternativa }}</p>
-    <br />
+    <p>Este questionário possui {{ questoes.count }} quest{{ questoes.count|pluralize:"ão,ões" }}.</p>
+    {% if ult_resposta %}
+    <p>Você acertou {{ pontos }} quest{{ pontos|pluralize:"ão,ões" }}.</p>
+    <p>Você respondeu este questionário em {{ ult_resposta.data_atualizacao }}.</p>
+    {% endif %}
+    <a href="{% url 'cursos:resposta' curso.atalho aula.pk questoes.first.pk %}">Iniciar questionário</a>
 </div>
-{% empty %}
-<p>Nenhuma questão foi encontrada para este curso</p>
-{% endfor %}
-
-<form class="form-signin" method="POST">
-    {% csrf_token %}
-    {% for questao in questoes %}
-    <fieldset class="form-group">
-        <h2 class="form-signin-heading">{{ questao }}</h2>
-        {% for erro in formulario.non_field_errors %}
-            <div class="alert alert-danger" role="alert">
-                {{ erro }}
-                {# formulario.non_field_errors.as_text #}
-            </div>
-        {% endfor %}
-
-        {% for campo in formulario %}
-            {{ campo.label_tag }}
-            {{ campo|add_class:"form-control" }}
-            {% for erro in campo.errors %}
-                <div class="alert alert-danger" role="alert">
-                    {{ erro }}
-                </div>
-            {% endfor %}
-        {% endfor %}
-
-    </fieldset>
-    {% endfor %}
-    <button class="btn btn-lg btn-primary btn-block mt-4" type="submit">Cadastrar</button>
-</form>
 
 {% endblock conteudo %}

@@ -1,4 +1,5 @@
 {% extends "aula_detalhes.html" %}
+{% load staticfiles %}
 
 {% block breadcrumb %}
     {{ block.super }}
@@ -12,7 +13,7 @@
 {% if video.is_embedded %}
 <div class="video-container">
     <!-- <div id="ytplayer"></div> -->
-    <iframe id="ytplayer" onload="videoCarregou()" frameborder="0" allowfullscreen="1" enablejsapi="1" allow="autoplay; encrypted-media" title="YouTube video player" width="640" height="360" src="https://www.youtube.com/embed/{{ video.link }}?enablejsapi=1">    
+    <iframe id="ytplayer" onload="videoCarregou()" frameborder="0" allowfullscreen="1" enablejsapi="1" allow="autoplay; encrypted-media" title="YouTube video player" width="640" height="360" src="https://www.youtube.com/embed/{{ video.link }}?enablejsapi=1">
     </iframe>
 </div>
 
@@ -24,4 +25,8 @@
 <p>Nenhum vídeo foi encontrado para este item</p>
 {% endif %}
 
+<script src="{% static "js/main.js" %}" type="text/javascript"></script>
 {% endblock conteudo %}
+
+{% block javascript %}
+{% endblock %}

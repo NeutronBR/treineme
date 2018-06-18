@@ -2,7 +2,7 @@ from django import forms
 # from django.core.mail import send_mail
 from django.conf import settings
 from mail import envia_email_template
-from cursos.models import Comentario
+from cursos.models import Comentario, Alternativa
 
 
 class ContatoCurso(forms.Form):
@@ -34,3 +34,7 @@ class ComentarioForm(forms.ModelForm):
     class Meta:
         model = Comentario
         fields = ['comentario']
+
+
+# class RespostaForm(forms.Form):
+#     alternativas = forms.ModelChoiceField(queryset=Alternativa.objects.all(), widget=forms.RadioSelect)
