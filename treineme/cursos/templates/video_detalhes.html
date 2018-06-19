@@ -29,4 +29,15 @@
 {% endblock conteudo %}
 
 {% block javascript %}
+<script>
+    $.ajax({
+        url: '#',
+        // na url chamar função que registra filme assistido
+        data: {'video_pk': {{ video.pk }}},
+        dataType: 'json',
+        success: function(data) {
+            alert("Entrei na função AJAX")
+        }
+    });
+</script>
 {% endblock %}

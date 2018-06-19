@@ -201,7 +201,7 @@ class Questao(models.Model):
         return self.enunciado
 
     def prox_questao(self):
-        queryset = Questao.objects.filter(aula=self.aula)
+        queryset = Questao.objects.filter(aula=self.aula, disponivel=True)
         for i, questao in enumerate(queryset):
             if (questao == self) and (self != queryset.last()):
                 return queryset[i + 1]

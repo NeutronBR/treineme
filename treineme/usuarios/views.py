@@ -18,12 +18,13 @@ Usuario = get_user_model()
 
 
 def registrar(request):
+    # pdb.set_trace()
     template_name = 'registrar.html'
     if request.method == 'POST':
         # form = UserCreationForm(request.POST)
         form = RegistroForm(request.POST)
         if form.is_valid():
-            usuario = form.save()
+            usuario = form.salvar()
             usuario = authenticate(username=usuario.username, password=form.cleaned_data['password1'])
             login(request, usuario)
             return redirect('cursos:index')

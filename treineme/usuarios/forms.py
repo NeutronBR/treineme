@@ -6,16 +6,18 @@ from usuarios.models import SenhaReset
 from usuarios.utils import gerar_hash_chave
 from mail import envia_email_template
 
+# import pdb
 
 Usuario = get_user_model()
 
-# import pdb
-
 
 class RegistroForm(UserCreationForm):
+
+
     email = forms.EmailField(label="E-mail")
 
     def clean_email(self):
+        # pdb.set_trace()
         email = self.cleaned_data['email']
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError('Este e-mail já está sendo usado')
@@ -25,6 +27,7 @@ class RegistroForm(UserCreationForm):
     def salvar(self, commit=True):
         usuario = super(RegistroForm, self).save(commit=False)
         usuario.email = self.cleaned_data['email']
+        # pdb.set_trace()
         if commit:
             usuario.save()
         return usuario
@@ -33,7 +36,6 @@ class RegistroForm(UserCreationForm):
 class EditarUsuarioForm(forms.ModelForm):
     # é chamado pelo if is_valid() na view
     def clean_email(self):
-        # pdb.set_trace()
         email = self.cleaned_data['email']
 
         # instance é uma variável do ModelForm, que é a instância sendo "trabalhada" no momento

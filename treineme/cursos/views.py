@@ -154,7 +154,7 @@ def questionario(request, atalho_curso, aula_pk):
     contexto = {
         'curso': curso,
         'aula': aula,
-        'questoes': aula.questoes.all(),
+        'questoes': aula.questoes.filter(disponivel=True),
         'ult_resposta': Resposta.ultima_reposta(aula, request.user),
         'pontos': Resposta.pontuacao_questionario(aula, request.user)
     }
@@ -201,5 +201,5 @@ def resposta(request, atalho_curso, aula_pk, questao_pk):
         return render(request, template_name, contexto)
     else:
         respostas = Resposta.pontuacao_questionario(aula, request.user)
-        messages.success(request, 'Você acertou {} quest{}'.format(respostas, pluralize(respostas, "ão,ões")))
+        messages.success(request, 'Você acertou {} de {} quest{} disponíve{}'.format(respostas, pluralize(respostas, "ão,ões")))
         return redirect(reverse('cursos:aula_detalhes', kwargs={'atalho_curso': atalho_curso, 'aula_pk': aula.pk}))

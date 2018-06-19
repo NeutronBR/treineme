@@ -50,6 +50,3 @@ function youtube_parser(url){
     var match = url.match(regExp);
     return (match&&match[7].length==11)? ("https://www.youtube.com/embed/" + match[7] + "?enablejsapi=1") : false;
 }
-
-
-$.ajax({})
