@@ -32,7 +32,6 @@ class Curso(models.Model):
     instrutor = models.CharField('Nome do instrutor', max_length=100, blank=False)
     descricao = models.TextField('Descrição curta do curso', blank=False)
     sobre = models.TextField('Descrição completa do curso', blank=True)
-    keywords = models.TextField('Palavras-chave', blank=True)
     categoria = models.ForeignKey(Categoria, models.SET_NULL, null=True, blank=False)
     data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de criação')
     data_atualizacao = models.DateTimeField(auto_now=True, verbose_name='Data de atualização')
@@ -183,6 +182,11 @@ class Inscricao(models.Model):
     def aprovado(self):
         return self.status == self.APROVADO_STATUS
 
+    def video_assistido(self, video=None):
+        if video:
+            self.videos_assistidos.add(video)
+        return self.videos_assistidos.all()
+
     class Meta:
         verbose_name = 'Inscrição'
         verbose_name_plural = 'Inscrições'
@@ -254,7 +258,7 @@ class Resposta(models.Model):
     @staticmethod
     def pontuacao_questionario(aula, usuario):
         inscricao = Inscricao.objects.get(usuario=usuario, curso=aula.curso)
-        respostas = Resposta.objects.filter(inscricao=inscricao, acerto=True, questao__aula=aula).count()
+        respostas = Resposta.objects.filter(inscricao=inscricao, acerto=True, questao__aula=aula, questao__disponivel=True).count()
         return(respostas)
 
     class Meta:

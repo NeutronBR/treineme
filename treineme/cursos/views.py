@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from cursos.decorators import inscricao_requerida
 from django.template.defaultfilters import pluralize
-# from django.http import HttpResponse
+from django.http import JsonResponse, HttpResponseNotFound
 
 # Create your views here.
 
@@ -201,5 +201,27 @@ def resposta(request, atalho_curso, aula_pk, questao_pk):
         return render(request, template_name, contexto)
     else:
         respostas = Resposta.pontuacao_questionario(aula, request.user)
-        messages.success(request, 'Você acertou {} de {} quest{} disponíve{}'.format(respostas, pluralize(respostas, "ão,ões")))
+        messages.success(request, 'Você acertou {} quest{}'.format(respostas, pluralize(respostas, "ão,ões")))
         return redirect(reverse('cursos:aula_detalhes', kwargs={'atalho_curso': atalho_curso, 'aula_pk': aula.pk}))
+
+
+@login_required
+def video_assistido(request, *args, **kwargs):
+    # >>>>> FAZER UMA INSCRIÇÃO REQUERIDA <<<<<
+    if request.is_ajax() and request.POST:
+        print(request.POST)
+
+        try:
+            inscricao = Inscricao.objects.get(usuario=request.user, curso__atalho=request.POST['atalho_curso'])
+            video = Video.objects.get(pk=request.POST['video_pk'])
+
+            inscricao.video_assistido(video)
+        except Exception as e:
+            raise e
+
+        data = {
+            "message": "Vídeo assistido"
+        }
+        return JsonResponse(data)
+    else:
+        return HttpResponseNotFound()

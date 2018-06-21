@@ -13,7 +13,7 @@ def inscricao_requerida(view_func):
             try:
                 inscricao = Inscricao.objects.get(usuario=request.user, curso=curso)
                 if not inscricao.inscrito():
-                    messages.error(request, 'Sua inscrição em {} está está pendente'.format(curso))
+                    messages.error(request, 'Sua inscrição em {} está pendente'.format(curso))
                     return redirect('usuarios:painel')
             except ObjectDoesNotExist:
                 messages.warning(request, 'Você ainda não se inscreveu em {}'.format(curso))
