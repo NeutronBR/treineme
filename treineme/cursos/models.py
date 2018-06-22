@@ -187,6 +187,35 @@ class Inscricao(models.Model):
             self.videos_assistidos.add(video)
         return self.videos_assistidos.all()
 
+    def videos_finalizados(self):
+        videos = Video.objects.filter(aula__curso=self.curso).count()
+        assistidos = self.video_assistido().count()
+        if videos and assistidos:
+            return round((assistidos * 100) / videos, 2)
+        else:
+            return 0
+
+    def pontuacao_curso(self):
+        # inscricao = Inscricao.objects.get(usuario=usuario, curso=curso)
+        questoes = Questao.objects.filter(aula__curso=self.curso, disponivel=True)
+        respostas = Resposta.objects.filter(questao__in=questoes, inscricao=self, acerto=True).count()
+        questoes = questoes.count()
+
+        if questoes and respostas:
+            return round((respostas * 100) / questoes, 2)
+        else:
+            return 0
+
+
+    def atualiza_situacao(self):
+        if self.videos_finalizados() >= 100 and self.pontuacao_curso() >= 70:
+            self.status = self.APROVADO_STATUS
+        else:
+            self.status = self.INSCRITO_STATUS
+
+        self.save()
+        return self.get_status_display()
+
     class Meta:
         verbose_name = 'Inscrição'
         verbose_name_plural = 'Inscrições'
@@ -253,7 +282,6 @@ class Resposta(models.Model):
             questao__aula=aula,
             inscricao=Inscricao.objects.get(curso=aula.curso, usuario=usuario)
         ).last())
-
 
     @staticmethod
     def pontuacao_questionario(aula, usuario):

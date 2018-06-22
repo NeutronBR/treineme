@@ -1,0 +1,53 @@
+{% extends "painel.html" %}
+
+{% block conteudo %}
+
+<div class="list-group">
+    {% for usuario in usuarios %}
+    <a data-toggle="collapse" href="#collapse-usuario{{ usuario.pk }}" class="list-group-item list-group-item-action bg-secondary text-white" aria-expanded="true" aria-controls="collapse-usuario{{ usuario.pk }}">
+        <h6 class="d-flex justify-content-between align-items-center">
+            {{ usuario.get_full_name|default:usuario.username }}
+            <span class="badge badge-primary badge-pill">
+                {{ usuario.inscricoes.count }}
+            </span>
+            <!-- <i class="fa fa-angle-down float-right"></i> -->
+        </h6>
+    </a>
+    <div id="collapse-usuario{{ usuario.pk }}" class="collapse">
+        <div class="list-group mx-2">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Curso</th>
+                        <th scope="col">Nota</th>
+                        <th scope="col">Vídeos</th>
+                        <th scope="col">Situação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for inscricao in usuario.inscricoes.all %}
+                    <tr>
+                    <!-- <div class="list-group-item">
+                        {{ inscricao.curso }}
+                    </div> -->
+                        <th scope="row">{{ inscricao.curso }}</th>
+                        <td>{{ inscricao.pontuacao_curso }}%</td>
+                        <td>{{ inscricao.videos_finalizados }}%</td>
+                        <td>{{ inscricao.get_status_display }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock conteudo %}
+
+{% block javascript %}
+{{ block.super }}
+<script>
+    $("#relatorios").addClass("show");
+</script>
+{% endblock %}

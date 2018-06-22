@@ -12,5 +12,6 @@ urlpatterns = [
     path('editar/', editar, name='editar'),
     path('editar_senha/', editar_senha, name='editar_senha'),
     path('esqueceu_senha/', reset_senha, name='reset_senha'),
-    path('nova_senha/<str:chave>', reset_senha_confirmacao, name='nova_senha'),
+    path('nova_senha/<str:chave>', reset_senha_confirmacao, name='nova_senha'),    
+
 ]

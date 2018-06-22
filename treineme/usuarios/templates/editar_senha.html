@@ -40,3 +40,9 @@
     </form>
 </div>
 {% endblock conteudo %}
+{% block javascript %}
+{{ block.super }}
+<script>
+    $("#minha_conta").addClass("show");
+</script>
+{% endblock %}

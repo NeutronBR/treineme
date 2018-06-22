@@ -1,5 +1,5 @@
 {% for inscricao in inscricoes %}
-<li class="nav-item">
+<li class="nav-item mx-2">
     <a class="nav-link" href="{% url 'cursos:anuncios' inscricao.curso.atalho %}"><i class="fa fa-file-text fa-fw"></i> {{ inscricao.curso }}</a>
 </li>
 {% empty %}

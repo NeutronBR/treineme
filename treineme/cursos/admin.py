@@ -1,7 +1,12 @@
 from django.contrib import admin
 from cursos.models import Curso, Categoria, Inscricao, Anuncio, Comentario, Aula, Video, MaterialComplementar, Questao, Alternativa, Resposta
-from django.shortcuts import reverse
 # Register your models here.
+
+
+class AulaInline(admin.TabularInline):
+    model = Aula
+    extra = 1
+    show_change_link = True
 
 
 class CursoAdmin(admin.ModelAdmin):
@@ -9,6 +14,7 @@ class CursoAdmin(admin.ModelAdmin):
     readonly_fields = ['data_criacao', 'data_atualizacao']
     search_fields = ['nome', 'atalho']
     prepopulated_fields = {'atalho': ('nome',)}
+    inlines = [AulaInline]
 
 
 class CategoriaAdmin(admin.ModelAdmin):

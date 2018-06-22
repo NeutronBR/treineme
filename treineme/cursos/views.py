@@ -6,6 +6,7 @@ from django.contrib import messages
 from cursos.decorators import inscricao_requerida
 from django.template.defaultfilters import pluralize
 from django.http import JsonResponse, HttpResponseNotFound
+from django.contrib.auth import get_user_model
 
 # Create your views here.
 
@@ -149,7 +150,7 @@ def questionario(request, atalho_curso, aula_pk):
     template = 'questionario.html'
     curso = get_object_or_404(Curso, atalho=atalho_curso)
     aula = get_object_or_404(Aula, pk=aula_pk)
-    # inscricao = Inscricao.objects.get(curso=curso, usuario=request.user)
+    # Inscricao.objects.get(curso=curso, usuario=request.user).atualiza_situacao()
 
     contexto = {
         'curso': curso,
@@ -197,6 +198,9 @@ def resposta(request, atalho_curso, aula_pk, questao_pk):
         'aula': aula,
         'questao': questao
     }
+
+    inscricao.atualiza_situacao()
+
     if questao:
         return render(request, template_name, contexto)
     else:
@@ -216,6 +220,7 @@ def video_assistido(request, *args, **kwargs):
             video = Video.objects.get(pk=request.POST['video_pk'])
 
             inscricao.video_assistido(video)
+            inscricao.atualiza_situacao()
         except Exception as e:
             raise e
 
@@ -225,3 +230,29 @@ def video_assistido(request, *args, **kwargs):
         return JsonResponse(data)
     else:
         return HttpResponseNotFound()
+
+
+def relatorio_usuarios(request):
+    if request.user.is_staff:
+        template = 'relatorio_usuarios.html'
+        usuarios = get_user_model().objects.all().order_by('first_name', 'last_name')
+
+        contexto = {
+            'usuarios': usuarios,
+        }
+        return render(request, template, contexto)
+    else:
+        return redirect('usuarios:painel')
+
+
+def relatorio_cursos(request):
+    if request.user.is_staff:
+        template = 'relatorio_cursos.html'
+        cursos = Curso.objects.all()
+
+        contexto = {
+            'cursos': cursos,
+        }
+        return render(request, template, contexto)
+    else:
+        return redirect('usuarios:painel')

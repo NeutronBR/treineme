@@ -27,6 +27,7 @@ class RegistroForm(UserCreationForm):
     def salvar(self, commit=True):
         usuario = super(RegistroForm, self).save(commit=False)
         usuario.email = self.cleaned_data['email']
+        usuario.first_name = self.cleaned_data['username']
         # pdb.set_trace()
         if commit:
             usuario.save()

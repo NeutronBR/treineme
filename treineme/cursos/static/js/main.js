@@ -16,15 +16,20 @@ function onYouTubePlayerAPIReady() {
         // height: '360',
         // width: '640',
         // videoId: 'jrUVle5wdPY',
+        // usei controls=0 na url. Video sendo carregado pela URL, não por aqui
+        playerVars: {
+            controls: '0',
+        },
         events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange
-      }
+      },
     });
+    // console.log(player);
 }
 
 function onPlayerReady(event) {
-    // console.log("Player pronto")
+    console.log(event);
 }
 
 // when video ends
@@ -67,11 +72,14 @@ function showMessage(msg){
     divAlerta.innerHTML = msg;
     $('#messages').hide();
     // $('#messages').append('<div class="alert alert-success" role="alert">' + msg + '</div>').fadeIn('slow');
-    $('#messages').append(divAlerta).fadeIn('slow');
+    $('#messages').append(divAlerta);
+    $('#messages').fadeIn('slow');
     setTimeout(function(){
         $('#messages').fadeOut('slow');
-        divAlerta.remove();
-    }, 5000);
+        setTimeout(function(){
+            divAlerta.remove();
+        }, 1500);
+    }, 7000);
 }
 
 
