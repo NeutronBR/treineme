@@ -10,7 +10,7 @@
 {% block conteudo %}
 <h4>Questionário</h4>
 <div>
-    <p>Este questionário possui {{ questoes.count }} quest{{ questoes.count|pluralize:"ão,ões" }}.</p>
+    <p>Este questionário possui {{ questoes.count }} quest{{ questoes.count|pluralize:"ão,ões" }} disponíve{{ questoes.count|pluralize:"l,is" }}.</p>
     {% if ult_resposta %}
     <p>Você acertou {{ pontos }} quest{{ pontos|pluralize:"ão,ões" }}.</p>
     <p>Você respondeu este questionário em {{ ult_resposta.data_atualizacao }}.</p>

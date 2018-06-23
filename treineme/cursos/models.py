@@ -58,6 +58,11 @@ class Curso(models.Model):
     def get_aulas(self):
         return self.aulas.all()
 
+    def media_aval_curso(self):
+        inscricoes = self.inscricoes.exclude(nota_curso=None)
+        if inscricoes:
+            return round((inscricoes.aggregate(models.Sum('nota_curso'))['nota_curso__sum']) / inscricoes.count(), 2)
+
     class Meta:
         # nome "mais tragável" para ser usado em alguns lugares tipo o admin
         # https://docs.djangoproject.com/en/1.11/topics/db/models/#meta-options
@@ -160,10 +165,26 @@ class Inscricao(models.Model):
         (APROVADO_STATUS, 'Aprovado'),
         (CANCELADO_STATUS, 'Cancelado')
     )
+    MINSATISFEITO_NOTA = 1
+    INSATISFEITO_NOTA = 2
+    REGULAR_NOTA = 3
+    SATISFEITO_NOTA = 4
+    MSATISFEITO_NOTA = 5
+    NOTA_CHOICES = (
+        (MINSATISFEITO_NOTA, 'Muito insatisfeito'),
+        (INSATISFEITO_NOTA, 'Insatisfeito'),
+        (REGULAR_NOTA, 'Regular'),
+        (SATISFEITO_NOTA, 'Satisfeito'),
+        (MSATISFEITO_NOTA, 'Muito satisfeito')
+    )
     # usuario = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Usuário', related_name='inscricoes')
     usuario = models.ForeignKey(get_user_model(), verbose_name='Usuário', related_name='inscricoes', on_delete=models.PROTECT)
     curso = models.ForeignKey(Curso, verbose_name='Curso', related_name='inscricoes', on_delete=models.PROTECT)
     status = models.IntegerField(verbose_name='Situação', choices=STATUS_CHOICES, default=INSCRITO_STATUS, blank=True)
+    nota_questionario = models.FloatField('Nota', null=True)
+    qtd_videos = models.FloatField(verbose_name='Vídeos Assistidos', null=True)
+    nota_curso = models.IntegerField(verbose_name='Nota do curso', choices=NOTA_CHOICES, blank=False, default=None, null=True)
+    comentario = models.TextField(verbose_name='Comentário do curso', null=True, blank=True)
     data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de criação')
     data_atualizacao = models.DateTimeField(auto_now=True, verbose_name='Data de atualização')
 
@@ -191,30 +212,31 @@ class Inscricao(models.Model):
         videos = Video.objects.filter(aula__curso=self.curso).count()
         assistidos = self.video_assistido().count()
         if videos and assistidos:
-            return round((assistidos * 100) / videos, 2)
-        else:
-            return 0
+            # return round((assistidos * 100) / videos, 2)
+            self.qtd_videos = round((assistidos * 100) / videos, 2)
+            self.save()
 
-    def pontuacao_curso(self):
+    def atualiza_nota(self):
         # inscricao = Inscricao.objects.get(usuario=usuario, curso=curso)
         questoes = Questao.objects.filter(aula__curso=self.curso, disponivel=True)
         respostas = Resposta.objects.filter(questao__in=questoes, inscricao=self, acerto=True).count()
         questoes = questoes.count()
 
         if questoes and respostas:
-            return round((respostas * 100) / questoes, 2)
-        else:
-            return 0
+            self.nota_questionario = round((respostas * 100) / questoes, 2)
+            self.save()
 
 
     def atualiza_situacao(self):
-        if self.videos_finalizados() >= 100 and self.pontuacao_curso() >= 70:
+        # if self.videos_finalizados() >= 100 and self.pontuacao_curso() >= 70:
+        if self.qtd_videos >= 100 and self.nota_questionario >= 70:
             self.status = self.APROVADO_STATUS
         else:
             self.status = self.INSCRITO_STATUS
 
         self.save()
         return self.get_status_display()
+
 
     class Meta:
         verbose_name = 'Inscrição'

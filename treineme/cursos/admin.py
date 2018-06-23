@@ -25,6 +25,7 @@ class CategoriaAdmin(admin.ModelAdmin):
 class InscricaoAdmin(admin.ModelAdmin):
     list_display = ['curso', 'usuario', 'status']
     search_fields = ['usuario__username', 'curso__nome']
+    list_filter = ['usuario', 'status', 'curso']
 
 
 # class VideoInlineAdmin(admin.StackedInline):

@@ -15,13 +15,14 @@
     </a>
     <div id="collapse-usuario{{ curso.pk }}" class="collapse">
         <div class="list-group mx-2">
-            <table class="table">
+            <table class="table table-responsive-sm">
                 <thead>
                     <tr>
                         <th scope="col">Usuário</th>
                         <th scope="col">Nota</th>
                         <th scope="col">Vídeos</th>
                         <th scope="col">Situação</th>
+                        <th scope="col">Avaliação</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -31,11 +32,19 @@
                         {{ inscricao.curso }}
                     </div> -->
                         <th scope="row">{{ inscricao.usuario.get_full_name }}</th>
-                        <td>{{ inscricao.pontuacao_curso }}%</td>
-                        <td>{{ inscricao.videos_finalizados }}%</td>
+                        <td>{{ inscricao.nota_questionario }}%</td>
+                        <td>{{ inscricao.qtd_videos }}%</td>
                         <td>{{ inscricao.get_status_display }}</td>
+                        <td>{{ inscricao.get_nota_curso_display|default:"" }}</td>
                     </tr>
                     {% endfor %}
+                    <tr class="bg-light border-right border-left border-primary">
+                        <th scope="row">Média de avaliação</th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>{{ curso.media_aval_curso }}/5</td>
+                    </tr>
                 </tbody>
             </table>
         </div>

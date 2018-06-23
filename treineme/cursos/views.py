@@ -199,6 +199,7 @@ def resposta(request, atalho_curso, aula_pk, questao_pk):
         'questao': questao
     }
 
+    inscricao.atualiza_nota()
     inscricao.atualiza_situacao()
 
     if questao:
@@ -220,6 +221,7 @@ def video_assistido(request, *args, **kwargs):
             video = Video.objects.get(pk=request.POST['video_pk'])
 
             inscricao.video_assistido(video)
+            inscricao.videos_finalizados()
             inscricao.atualiza_situacao()
         except Exception as e:
             raise e
@@ -256,3 +258,15 @@ def relatorio_cursos(request):
         return render(request, template, contexto)
     else:
         return redirect('usuarios:painel')
+
+
+@login_required
+@inscricao_requerida
+def informacoes(request, atalho_curso):
+    template = 'informacoes.html'
+    curso = get_object_or_404(Curso, atalho=atalho_curso)
+
+    contexto = {
+        'curso': curso,
+    }
+    return render(request, template, contexto)

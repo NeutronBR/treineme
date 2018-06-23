@@ -31,8 +31,8 @@
                         {{ inscricao.curso }}
                     </div> -->
                         <th scope="row">{{ inscricao.curso }}</th>
-                        <td>{{ inscricao.pontuacao_curso }}%</td>
-                        <td>{{ inscricao.videos_finalizados }}%</td>
+                        <td>{{ inscricao.nota_questionario }}%</td>
+                        <td>{{ inscricao.qtd_videos }}%</td>
                         <td>{{ inscricao.get_status_display }}</td>
                     </tr>
                     {% endfor %}
