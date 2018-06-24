@@ -18,10 +18,6 @@
     <div class="card-body">
         <p class="card_text">{{ aula.descricao|linebreaksbr }}</p>
 
-        {% if questionario %}
-        <h4 class="mb-4"><a href="{% url 'cursos:questionario' curso.atalho aula.pk %}">Questionário</a></h4>
-        {% endif %}
-
         {% if aula.aula_ant %}
         <a href="{% url 'cursos:aula_detalhes' curso.atalho aula.aula_ant.pk %}" title="Aula anterior">
             <i class="fa fa-chevron-left float-left" aria-hidden="true"></i>
@@ -35,25 +31,36 @@
     </div>
 </div>
 
+{% if questionario %}
+<div class="card">
+    <a href="{% url 'cursos:questionario' curso.atalho aula.pk %}">
+        <h4 class="card-body">Questionário</h4>
+    </a>
+</div>
+{% endif %}
+
 {% if videos %}
 <div class="card">
     <a data-toggle="collapse" data-parent="#accordion" href="#collapse-video" aria-expanded="true" aria-controls="collapse-video">
         <div class="card-header" role="tab" id="heading-video">
-            <h3 class="card-title">Vídeos<i class="fa fa-angle-down float-right" aria-hidden="true"></i></h3>
+            <h4 class="card-title">Vídeos<i class="fa fa-angle-down float-right" aria-hidden="true"></i></h4>
         </div>
     </a>
     <div id="collapse-video" class="collapse" role="tabpanel" aria-labelledby="heading-video">
-        <ul class="list-group">
-            {% for video in videos %}
-            <a href="{% url 'cursos:video_detalhes' curso.atalho video.pk %}">
-                <li class="list-group-item">
-                    <h5>{{ video }}</h5>
-                    <small>Última atualização em: {{ video.data_atualizacao }}</small>
-                </li>
-            </a>
-            {% empty %}
-            {% endfor %}
-        </ul>
+        <div class="card-body">
+
+            <ul class="list-group">
+                {% for video in videos %}
+                <a href="{% url 'cursos:video_detalhes' curso.atalho video.pk %}">
+                    <li class="list-group-item">
+                        {{ video }}
+                        <small class="float-right">Última atualização em: {{ video.data_atualizacao }}</small>
+                    </li>
+                </a>
+                {% empty %}
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 </div>
 {% endif %}
@@ -62,10 +69,10 @@
 <div class="card">
     <a data-toggle="collapse" data-parent="#accordion" href="#collapse-complementar" aria-expanded="true" aria-controls="collapse-complementar">
         <div class="card-header" role="tab" id="heading-complementar">
-            <h5 class="mb-0">
+            <h4 class="mb-0">
                     Materiais Complementares
                     <i class="fa fa-angle-down float-right" aria-hidden="true"></i>
-            </h5>
+            </h4>
         </div>
     </a>
     <div id="collapse-complementar" class="collapse" role="tabpanel" aria-labelledby="heading-complementar">
@@ -75,7 +82,7 @@
                 <a href="{{ material.arquivo.url }}" target="_blank">
                     <li class="list-group-item">
                         {{ material.titulo }}
-                        <small class="float-right">Atualizado há {{ material.data_atualizacao|timesince }}</small>
+                        <small class="float-right">Última atualização em: {{ material.data_atualizacao }}</small>
                     </li>
                 </a>
             {% endfor %}

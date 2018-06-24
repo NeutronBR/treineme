@@ -63,6 +63,16 @@ class Curso(models.Model):
         if inscricoes:
             return round((inscricoes.aggregate(models.Sum('nota_curso'))['nota_curso__sum']) / inscricoes.count(), 2)
 
+    def media_notas(self):
+        if self.inscricoes:
+            return round((self.inscricoes.aggregate(models.Sum('nota_questionario'))['nota_questionario__sum']) / self.inscricoes.count(), 2)
+
+
+    def media_qtd_videos(self):
+        if self.inscricoes:
+            return round((self.inscricoes.aggregate(models.Sum('qtd_videos'))['qtd_videos__sum']) / self.inscricoes.count(), 2)
+
+
     class Meta:
         # nome "mais tragável" para ser usado em alguns lugares tipo o admin
         # https://docs.djangoproject.com/en/1.11/topics/db/models/#meta-options
@@ -183,7 +193,7 @@ class Inscricao(models.Model):
     status = models.IntegerField(verbose_name='Situação', choices=STATUS_CHOICES, default=INSCRITO_STATUS, blank=True)
     nota_questionario = models.FloatField('Nota', null=True)
     qtd_videos = models.FloatField(verbose_name='Vídeos Assistidos', null=True)
-    nota_curso = models.IntegerField(verbose_name='Nota do curso', choices=NOTA_CHOICES, blank=False, default=None, null=True)
+    nota_curso = models.IntegerField(verbose_name='Nota do curso', choices=NOTA_CHOICES, blank=True, default=None, null=True)
     comentario = models.TextField(verbose_name='Comentário do curso', null=True, blank=True)
     data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de criação')
     data_atualizacao = models.DateTimeField(auto_now=True, verbose_name='Data de atualização')

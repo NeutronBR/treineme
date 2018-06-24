@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from cursos.models import Curso, Inscricao, Anuncio, Aula, Video, Questao, Resposta, Alternativa
-from cursos.forms import ContatoCurso, ComentarioForm
+from cursos.forms import ContatoCurso, ComentarioForm, AvaliacaoCursoForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from cursos.decorators import inscricao_requerida
@@ -264,9 +264,21 @@ def relatorio_cursos(request):
 @inscricao_requerida
 def informacoes(request, atalho_curso):
     template = 'informacoes.html'
+    contexto = {}
     curso = get_object_or_404(Curso, atalho=atalho_curso)
+    inscricao = Inscricao.objects.get(curso=curso, usuario=request.user)
+    form = AvaliacaoCursoForm(request.POST or None, instance=inscricao)
+
+    if form.is_valid():
+        form.save()
+        form = AvaliacaoCursoForm(instance=inscricao)
+        messages.success(request, 'Sua avaliação foi enviada com sucesso')
+        contexto['sucesso'] = True
+
 
     contexto = {
         'curso': curso,
+        'formulario': form,
+        'inscricao': inscricao
     }
     return render(request, template, contexto)

@@ -1,0 +1,61 @@
+{% extends "painel_curso.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    <li class="breadcrumb-item"><a href="{% url 'cursos:informacoes' curso.atalho %}">Informações</a></li>
+{% endblock breadcrumb %}
+
+{% block conteudo %}
+
+{% load widget_tweaks %}
+<div class="container">
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <h3 class="form-signin-heading">Informações e avaliação do curso</h3>
+            {% for erro in formulario.non_field_errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ erro }}
+            </div>
+            {% endfor %}
+
+            {% if sucesso %}
+            <div class="alert alert-success" role="alert">
+                <p>Suas informações foram atualizadas</p>
+            </div>
+            {% endif %}
+
+            <div>
+                <label for="id_status">Situação:</label>
+                <p id="id_status">
+                    {{ inscricao.get_status_display }}
+                </p>
+            </div>
+            <div>
+                <label for="id_nota">Nota das avaliações:</label>
+                <p id="id_nota">
+                    {{ inscricao.nota_questionario }}%
+                </p>
+            </div>
+            <div>
+                <label for="id_qtd_videos">Vídeos assistidos:</label>
+                <p id="id_qtd_videos">
+                    {{ inscricao.qtd_videos }}%
+                </p>
+            </div>
+
+            {% for campo in formulario %}
+                {{ campo.label_tag }}
+                {{ campo|add_class:"form-control" }}
+                {% for erro in campo.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ erro }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            <button class="btn btn-lg btn-primary btn-block mt-4" type="submit">Atualizar</button>
+        </fieldset>
+    </form>
+</div>
+
+{% endblock conteudo %}

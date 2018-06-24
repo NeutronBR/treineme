@@ -39,11 +39,11 @@
                     </tr>
                     {% endfor %}
                     <tr class="bg-light border-right border-left border-primary">
-                        <th scope="row">Média de avaliação</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>{{ curso.media_aval_curso }}/5</td>
+                        <th scope="row">Média global</th>
+                        <td>{{ curso.media_notas }}%</td>
+                        <td>{{ curso.media_qtd_videos }}%</td>
+                        <td>-</td>
+                        <td>{% if curso.media_aval_curso %}{{ curso.media_aval_curso }}/5{% endif %}</td>
                     </tr>
                 </tbody>
             </table>
