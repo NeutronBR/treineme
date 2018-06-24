@@ -11,6 +11,8 @@ dj-database-url = "*"
 django-widget-tweaks = "*"
 whitenoise = "*"
 django-taggit = "*"
+django-storages = "*"
+"boto3" = "*"
 
 [dev-packages]
 django-extensions = "*"

@@ -22,11 +22,12 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', include('cursos.urls')),
-    path('usuario/', include('usuarios.urls')),    
+    path('usuario/', include('usuarios.urls')),
     path('admin/', admin.site.urls),
 ]
 
 # configuracao para servir arquivos como os videos das aulas em ambiente de desenvolvimento
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG is True:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # print(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))

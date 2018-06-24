@@ -27,7 +27,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['mighty-castle-93813.herokuapp.com']
 
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'widget_tweaks',
     'taggit',
+    'storages',
 
     'usuarios',
     'cursos',
@@ -92,12 +93,12 @@ WSGI_APPLICATION = 'treineme.wsgi.application'
 #
 DATABASES = {
     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'banco',
-#         'USER': 'user',
-#         'PASSWORD': 'senha',
-#         'HOST': '',
-#         'PORT': '5432',
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': 'banco',
+        # 'USER': 'user',
+        # 'PASSWORD': 'senha',
+        # 'HOST': '',
+        # 'PORT': '5432',
     }
 }
 
@@ -185,6 +186,20 @@ DATABASES['default'].update(db)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 TAGGIT_CASE_INSENSITIVE = True
+
+
+# set S3 as the place to store your files.
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", "")
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
+AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME", "")
+AWS_QUERYSTRING_AUTH = False  # This will make sure that the file URL does not have unnecessary parameters like your access key.
+AWS_S3_CUSTOM_DOMAIN = AWS_STORAGE_BUCKET_NAME + '.s3.amazonaws.com'
+AWS_LOCATION = '/media/'  # estrutura do bucket tem o /media/ sem essa config, não consegue encontrar o path
+MEDIA_URL = 'https://' + AWS_S3_CUSTOM_DOMAIN + '/media/'
+
+
 
 try:
     from local_settings import *

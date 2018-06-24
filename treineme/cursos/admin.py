@@ -22,6 +22,12 @@ class CategoriaAdmin(admin.ModelAdmin):
     search_fields = ['nome']
 
 
+class AnuncioAdmin(admin.ModelAdmin):
+    list_display = ['titulo', 'curso']
+    search_fields = ['curso', 'titulo']
+    list_filter = ['curso']
+
+
 class InscricaoAdmin(admin.ModelAdmin):
     list_display = ['curso', 'usuario', 'status']
     search_fields = ['usuario__username', 'curso__nome']
@@ -75,7 +81,8 @@ class QuestaoAdmin(admin.ModelAdmin):
 admin.site.register(Curso, CursoAdmin)
 admin.site.register(Categoria, CategoriaAdmin)
 admin.site.register(Inscricao, InscricaoAdmin)
+admin.site.register(Anuncio, AnuncioAdmin)
 # O registro de admin não exige a criação de uma classe
-admin.site.register([Anuncio, Comentario, Video, Resposta])
+admin.site.register([Comentario, Video, Resposta])
 admin.site.register(Aula, AulaAdmin)
 admin.site.register(Questao, QuestaoAdmin)
