@@ -78,6 +78,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
 
                 'context_processors.nome_empresa',
+                'context_processors.treineme_site',
             ],
         },
     },
@@ -158,6 +159,7 @@ LOGOUT_URL = 'usuarios:logout'
 
 # Nome da empresa pela aplicação
 NOME_EMPRESA = 'PUC-MG'
+TREINEME_SITE = os.getenv('TREINEME_SITE')
 
 
 # E-mails

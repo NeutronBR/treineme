@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from usuarios.models import SenhaReset
 from usuarios.utils import gerar_hash_chave
 from mail import envia_email_template
+from django.conf import settings
 
 # import pdb
 
@@ -74,5 +75,6 @@ class ResetSenhaForm(forms.Form):
         contexto = {
             'reset': reset,
             'nome': usuario.get_full_name(),
+            'dominio_site': settings.TREINEME_SITE
         }
         envia_email_template(assunto, template_name, contexto, [usuario.email])

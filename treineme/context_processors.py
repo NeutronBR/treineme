@@ -1,4 +1,5 @@
 from django.conf import settings
+# from django.contrib.sites.shortcuts import get_current_site
 
 
 # https://stackoverflow.com/a/433209/6186117
@@ -31,3 +32,8 @@ from django.conf import settings
 
 def nome_empresa(request):
     return {'NOME_EMPRESA': settings.NOME_EMPRESA}
+
+
+def treineme_site(request):
+    return {'TREINEME_SITE': settings.TREINEME_SITE}
+    # return {'TREINEME_SITE': get_current_site()}
