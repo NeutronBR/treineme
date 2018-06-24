@@ -1,0 +1,11 @@
+python .\treineme\manage.py dumpdata -o db.json
+ --natural-foreign -e contenttypes -e auth.Permission -e sessions -e admin --indent=4 -e taggit
+
+
+
+ comando para exportar o banco de dados com sucesso para o Heroku.
+
+ Ignorar algumas aplicações/modelos
+ exportar para arquivo usando o "-o arquivo"
+ --natual-foreign para manter a preocupação com as chaves estrangeiras
+ --indent=4 para facilitar a leitura
