@@ -29,7 +29,9 @@
                         {% if user.is_authenticated %}
                         <span class="navbar-text mx-2 navbar-light">Seja bem-vindo(a), {{ user.get_full_name|default:user.username }}</span>
                         {% endif %}
-
+                        {% if user.is_staff %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'admin:index' %}"><i class="fa fa-cogs fa-fw" aria-hidden="true"></i> Admin</a></li>
+                        {% endif %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'cursos:cursos' %}"><i class="fa fa-graduation-cap fa-fw" aria-hidden="true"></i> Cursos</a></li>
                         {% if user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'usuarios:painel' %}"><i class="fa fa-tachometer" aria-hidden="true"></i> Painel</a></li>
