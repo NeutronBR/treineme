@@ -202,7 +202,7 @@ MEDIA_URL = 'https://' + AWS_S3_CUSTOM_DOMAIN + '/media/'
 
 
 try:
-    from local_settings import *
+
     from django.contrib.messages import constants as messages
 
     MESSAGE_TAGS = {
@@ -213,6 +213,7 @@ try:
         messages.ERROR: 'alert-danger'
     }
 
+    from local_settings import *
 
 except ImportError as e:
     print(e)

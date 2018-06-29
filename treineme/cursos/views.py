@@ -5,8 +5,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from cursos.decorators import inscricao_requerida
 from django.template.defaultfilters import pluralize
-from django.http import JsonResponse, HttpResponseNotFound
+from django.http import JsonResponse, HttpResponseNotFound, HttpResponse
 from django.contrib.auth import get_user_model
+from django.conf import settings
+from io import BytesIO
 
 # Create your views here.
 
@@ -282,3 +284,123 @@ def informacoes(request, atalho_curso):
         'inscricao': inscricao
     }
     return render(request, template, contexto)
+
+
+@login_required
+@inscricao_requerida
+def certificado(request, atalho_curso):
+    contexto = {}
+    curso = get_object_or_404(Curso, atalho=atalho_curso)
+    inscricao = Inscricao.objects.get(curso=curso, usuario=request.user)
+
+    if not inscricao.aprovado():
+        messages.info(request, 'Você ainda não atingiu os requisitos para emitir o certificado')
+        return redirect(reverse('cursos:informacoes', kwargs={'atalho_curso': atalho_curso}))
+    else:
+        from reportlab.lib.pagesizes import A4
+        from reportlab.pdfgen import canvas
+        from reportlab.lib import colors
+        from reportlab.lib.units import mm
+        from django.utils import formats
+
+
+        # Create the HttpResponse object with the appropriate PDF headers.
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="certificado.pdf"'
+
+        buffer = BytesIO()
+
+
+        aluno = inscricao.usuario.get_full_name()
+        curso = str(inscricao.curso)
+        # data = inscricao.data_atualizacao.strftime("%d/%B/%Y")
+        data = formats.date_format(inscricao.data_atualizacao, format="DATE_FORMAT")
+        empresa = settings.NOME_EMPRESA + " Treine-me"
+
+        y, x = A4
+        margem_topo = y - 15 * mm
+        margem_base = 15 * mm
+        margem_esquerda = 15 * mm
+        margem_direita = x - 15 * mm
+        altura_cabecalho = 35 * mm
+        largura_util = (x - margem_esquerda - (x - margem_direita))
+
+        string = empresa
+        font = 'Times-Roman'
+        size = 30
+
+        # Create the PDF object, using the BytesIO object as its "file."
+        my_canvas = canvas.Canvas(buffer)
+        my_canvas.setPageSize((x, y))
+
+        # Desenha cabeçalho cinza
+        my_canvas.setFillGray(0.40)
+        my_canvas.rect(margem_esquerda, (margem_topo - altura_cabecalho),
+                       (x - margem_esquerda - (x - margem_direita)), altura_cabecalho,
+                       stroke=0, fill=1)
+
+        # Desenha corpo
+        my_canvas.rect(margem_esquerda, margem_base,
+                       largura_util,
+                       (margem_topo - margem_base - altura_cabecalho - 10 * mm),
+                       stroke=1, fill=0)
+
+        # Create textobject
+        textobject = my_canvas.beginText()
+
+
+        # Cabeçalho
+        textobject.setFont(font, size)
+        texto_centralizado = ((largura_util - my_canvas.stringWidth(string, font, size)) / 2 + margem_esquerda)
+        textobject.setTextOrigin(texto_centralizado,
+                                 margem_topo - altura_cabecalho / 2)
+        textobject.setFillColor(colors.white)
+        textobject.textLine(text=string)
+
+
+        # Nome Aluno
+        string = aluno
+        texto_centralizado = ((largura_util - my_canvas.stringWidth(string, font, size)) / 2 + margem_esquerda)
+        textobject.setFillColor(colors.black)
+        textobject.setTextOrigin(texto_centralizado, 320)
+        textobject.textLine(text=string)
+
+        # Curso
+        string = curso
+        texto_centralizado = ((largura_util - my_canvas.stringWidth(string, font, size)) / 2 + margem_esquerda)
+        textobject.setFillColor(colors.black)
+        textobject.setTextOrigin(texto_centralizado, 190)
+        textobject.textLine(text=string)
+
+
+
+        size = 16
+        textobject.setFont(font, size)
+
+        string = "Certificamos que"
+        texto_centralizado = ((largura_util - my_canvas.stringWidth(string, font, size)) / 2 + margem_esquerda)
+        textobject.setTextOrigin(texto_centralizado, 370)
+        textobject.textLine(text=string)
+
+        string = "Concluiu com êxito o curso"
+        texto_centralizado = ((largura_util - my_canvas.stringWidth(string, font, size)) / 2 + margem_esquerda)
+        textobject.setTextOrigin(texto_centralizado, 230)
+        textobject.textLine(text=string)
+
+        string = "Concedido em " + data
+        texto_centralizado = ((largura_util - my_canvas.stringWidth(string, font, size)) / 2 + margem_esquerda)
+        textobject.setTextOrigin(texto_centralizado, 90)
+        textobject.textLine(text=string)
+
+        # Write text to the canvas
+        my_canvas.drawText(textobject)
+
+        # Close the PDF object cleanly.
+        my_canvas.showPage()
+        my_canvas.save()
+
+        # Get the value of the BytesIO buffer and write it to the response.
+        pdf = buffer.getvalue()
+        buffer.close()
+        response.write(pdf)
+        return response
